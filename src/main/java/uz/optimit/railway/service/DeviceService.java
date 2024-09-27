@@ -78,7 +78,7 @@ public class DeviceService {
     private Device fromDto(DeviceDto deviceDto, Device device) {
         device.setName(deviceDto.getName());
         device.setDescription(deviceDto.getDescription());
-        if (device.getStation() != null) {
+        if (deviceDto.getStationId() != null) {
             stationRepository.findById(deviceDto.getStationId()).ifPresent(device::setStation);
         }
         if (deviceDto.getLevelCrossingId() != null) {
