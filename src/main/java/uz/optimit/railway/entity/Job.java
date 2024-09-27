@@ -10,7 +10,6 @@ import uz.optimit.railway.entity.template.AbsEntity;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Job extends AbsEntity {

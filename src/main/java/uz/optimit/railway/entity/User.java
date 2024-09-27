@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "users")

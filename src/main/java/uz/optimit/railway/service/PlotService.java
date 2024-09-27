@@ -35,7 +35,7 @@ public class PlotService {
             throw new IllegalArgumentException("Plot with id " + id + " not found");
 
         Plot plot = optionalPlot.get();
-        plotMapper.update(plot, plotDto);
+        plotMapper.update(plotDto, plot);
         repository.save(plot);
 
         return new ApiResponse("Plot updated", true);

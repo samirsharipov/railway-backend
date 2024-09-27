@@ -58,10 +58,10 @@ public class PlotMapper {
                 .toList();
     }
 
-    public void update(Plot plot, PlotDto plotDto) {
-        modelMapper.map(plot, plotDto);
+    public void update(PlotDto plotDto, Plot plot) {
         if (plotDto.getEnterpriseId() != null) {
             plot.setEnterprise(enterpriseService.getEnterpriseById(plotDto.getEnterpriseId()));
         }
+        modelMapper.map(plotDto, plot);
     }
 }

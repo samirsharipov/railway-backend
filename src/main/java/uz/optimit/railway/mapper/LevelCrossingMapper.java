@@ -41,10 +41,10 @@ public class LevelCrossingMapper {
     }
 
     public void update(LevelCrossingDto dto, LevelCrossing entity) {
-        entity.setName(dto.name());
-        entity.setDescription(dto.description());
-        entity.setAddress(dto.address());
-        entity.setLatitude(dto.latitude());
+        entity.setName(dto.name() != null ? dto.name() : entity.getName());
+        entity.setDescription(dto.description() != null ? dto.description() : null);
+        entity.setAddress(dto.address() != null ? dto.address() : null);
+        entity.setLatitude(dto.latitude() != null ? dto.latitude() : null);
         entity.setLongitude(dto.longitude() != null ? dto.longitude() : null);
         entity.setLongitude(dto.longitude() != null ? dto.longitude() : null);
         entity.setPlot(dto.plotId() != null ? plotService.findById(dto.plotId()) : entity.getPlot());

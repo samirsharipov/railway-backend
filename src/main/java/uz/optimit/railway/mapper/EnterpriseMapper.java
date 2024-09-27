@@ -60,10 +60,10 @@ public class EnterpriseMapper {
     }
 
     public void update(EnterpriseDto enterpriseDto, Enterprise enterprise) {
-        modelMapper.map(enterpriseDto, enterprise);
 
         if (enterpriseDto.getMtuId() != null) {
             enterprise.setMtu(mtuService.getMtu(enterpriseDto.getMtuId()));
         }
+        modelMapper.map(enterpriseDto, enterprise);
     }
 }
