@@ -2,15 +2,18 @@ package uz.optimit.railway.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 import uz.optimit.railway.entity.template.AbsEntity;
 import uz.optimit.railway.enums.Permission;
 import uz.optimit.railway.enums.RoleType;
 
-
 import java.util.List;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

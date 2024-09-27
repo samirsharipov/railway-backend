@@ -3,15 +3,17 @@ package uz.optimit.railway.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 import uz.optimit.railway.entity.template.AbsEntity;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,6 +25,7 @@ public class Action extends AbsEntity {
     private Device device;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ToString.Exclude
     private User user;
 
     private Timestamp doneTime;
