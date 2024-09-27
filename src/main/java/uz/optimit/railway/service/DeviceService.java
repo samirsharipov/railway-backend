@@ -77,8 +77,12 @@ public class DeviceService {
     private Device fromDto(DeviceDto deviceDto, Device device) {
         device.setName(deviceDto.getName());
         device.setDescription(deviceDto.getDescription());
-        stationRepository.findById(deviceDto.getStationId()).ifPresent(device::setStation);
-        levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
+        if (device.getStation() != null) {
+            stationRepository.findById(deviceDto.getStationId()).ifPresent(device::setStation);
+        }
+        if (deviceDto.getLevelCrossingId() != null) {
+            levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
+        }
         device.setLongitude(deviceDto.getLongitude());
         device.setLatitude(deviceDto.getLatitude());
         return device;
