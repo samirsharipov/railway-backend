@@ -57,7 +57,8 @@ public class DeviceService {
         if (device.getStation() != null) {
             deviceDto.setStationId(device.getStation().getId());
             deviceDto.setStationName(device.getStation().getName());
-        } else {
+        }
+        if (device.getLevelCrossing() != null) {
             deviceDto.setLevelCrossingId(device.getLevelCrossing().getId());
             deviceDto.setLevelCrossingName(device.getLevelCrossing().getName());
         }
