@@ -14,7 +14,9 @@ public class DeviceDto {
     private String name;
     private String description;
     private UUID stationId;
+    private UUID levelCrossingId;
     private String stationName;
+    private String levelCrossingName;
     private double latitude;
     private double longitude;
 }

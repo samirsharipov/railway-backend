@@ -8,6 +8,7 @@ import uz.optimit.railway.mapper.ActionMapper;
 import uz.optimit.railway.payload.*;
 import uz.optimit.railway.repository.ActionRepository;
 import uz.optimit.railway.repository.DeviceRepository;
+import uz.optimit.railway.repository.LevelCrossingRepository;
 import uz.optimit.railway.repository.StationRepository;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class DeviceService {
     private final StationRepository stationRepository;
     private final ActionRepository actionRepository;
     private final ActionMapper actionMapper;
+    private final LevelCrossingRepository levelCrossingRepository;
 
     public ApiResponse create(DeviceDto deviceDto) {
         repository.save(fromDto(deviceDto, new Device()));
@@ -52,8 +54,13 @@ public class DeviceService {
         deviceDto.setId(device.getId());
         deviceDto.setName(device.getName());
         deviceDto.setDescription(device.getDescription());
-        deviceDto.setStationId(device.getStation().getId());
-        deviceDto.setStationName(device.getStation().getName());
+        if (device.getStation() != null) {
+            deviceDto.setStationId(device.getStation().getId());
+            deviceDto.setStationName(device.getStation().getName());
+        } else {
+            deviceDto.setLevelCrossingId(device.getLevelCrossing().getId());
+            deviceDto.setLevelCrossingName(device.getLevelCrossing().getName());
+        }
         deviceDto.setLongitude(device.getLongitude());
         deviceDto.setLatitude(device.getLatitude());
         return deviceDto;
@@ -71,6 +78,7 @@ public class DeviceService {
         device.setName(deviceDto.getName());
         device.setDescription(deviceDto.getDescription());
         stationRepository.findById(deviceDto.getStationId()).ifPresent(device::setStation);
+        levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
         device.setLongitude(deviceDto.getLongitude());
         device.setLatitude(deviceDto.getLatitude());
         return device;

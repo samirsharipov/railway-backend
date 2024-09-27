@@ -2,15 +2,17 @@ package uz.optimit.railway.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 import uz.optimit.railway.entity.template.AbsEntity;
 
-@EqualsAndHashCode(callSuper = true)
+import java.util.Objects;
+
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class Device extends AbsEntity {

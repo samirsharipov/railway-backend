@@ -2,15 +2,15 @@ package uz.optimit.railway.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import uz.optimit.railway.entity.template.AbsEntity;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class Station extends AbsEntity {
@@ -22,4 +22,5 @@ public class Station extends AbsEntity {
 
     @ManyToOne
     private Plot plot;
+
 }

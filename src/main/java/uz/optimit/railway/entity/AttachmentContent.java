@@ -2,15 +2,19 @@ package uz.optimit.railway.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.proxy.HibernateProxy;
 import uz.optimit.railway.entity.template.AbsEntity;
 
+import java.util.Objects;
 
-@Data
+
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
