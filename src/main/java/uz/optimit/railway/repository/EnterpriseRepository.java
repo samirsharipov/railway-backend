@@ -8,6 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EnterpriseRepository extends JpaRepository<Enterprise, UUID> {
-
     List<Enterprise> findAllByMtuId(UUID mtuId);
 }

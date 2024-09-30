@@ -49,6 +49,4 @@ public class LevelCrossingMapper {
         entity.setLongitude(dto.longitude() != null ? dto.longitude() : null);
         entity.setPlot(dto.plotId() != null ? plotService.findById(dto.plotId()) : entity.getPlot());
     }
-
-
 }

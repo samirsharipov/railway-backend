@@ -6,5 +6,4 @@ import uz.optimit.railway.entity.Station;
 import java.util.UUID;
 
 public interface StationRepository extends JpaRepository<Station, UUID> {
-
 }

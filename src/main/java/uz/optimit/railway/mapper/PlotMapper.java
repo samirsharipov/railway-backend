@@ -19,7 +19,6 @@ public class PlotMapper {
     private final ModelMapper modelMapper;
     private final EnterpriseService enterpriseService;
 
-
     @PostConstruct
     public void init() {
         modelMapper.addMappings(new PropertyMap<PlotDto, Plot>() {
@@ -38,7 +37,6 @@ public class PlotMapper {
             }
         });
     }
-
 
     public Plot toEntity(PlotDto plotDto) {
         Plot plot = modelMapper.map(plotDto, Plot.class);
