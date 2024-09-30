@@ -7,7 +7,6 @@ import uz.optimit.railway.payload.UserDto;
 
 public class UserFactorySingleton {
 
-
     private static UserFactorySingleton instance;
 
     private UserFactorySingleton() {}

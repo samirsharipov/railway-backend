@@ -13,7 +13,6 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
 
     List<Action> findAllByUserIdAndDoneIsFalse(UUID user_id);
     List<Action> findAllByUserIdAndDoneIsTrue(UUID user_id);
-
     List<Action> findAllByDeviceIdOrderByCreatedAtDesc(UUID deviceId);
 
     @Query("SELECT a FROM Action a WHERE a.device.id = :deviceId AND a.done = true ORDER BY a.createdAt DESC")

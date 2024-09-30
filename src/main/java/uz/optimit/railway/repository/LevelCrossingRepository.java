@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LevelCrossingRepository extends JpaRepository<LevelCrossing, UUID> {
-
     List<LevelCrossing> findAllByPlotId(UUID plotId);
 }

@@ -11,5 +11,4 @@ public class ForbiddenException extends RuntimeException {
         super(message);
         this.permission = permission;
     }
-
 }

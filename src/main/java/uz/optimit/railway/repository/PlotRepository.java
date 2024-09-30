@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PlotRepository extends JpaRepository<Plot, UUID> {
-
     List<Plot> findAllByEnterpriseId(UUID enterpriseId);
 }

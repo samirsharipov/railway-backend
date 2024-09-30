@@ -52,6 +52,4 @@ public class ActionMapper {
                 .map(this::actionGetDto)
                 .toList();
     }
-
-
 }

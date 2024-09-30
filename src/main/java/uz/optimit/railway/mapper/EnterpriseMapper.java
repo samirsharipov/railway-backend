@@ -38,7 +38,6 @@ public class EnterpriseMapper {
         });
     }
 
-
     public Enterprise toEntity(EnterpriseDto enterpriseDto) {
         Enterprise enterprise = modelMapper.map(enterpriseDto, Enterprise.class);
 
