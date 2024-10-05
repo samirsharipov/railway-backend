@@ -52,4 +52,27 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @GetMapping("/get-by-isStation-true")
+    public ResponseEntity<?> getByIsStationTrue() {
+        ApiResponse apiResponse = deviceService.getByIsStationTrue();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @GetMapping("/get-by-isStation-false")
+    public ResponseEntity<?> getByIsStationFalse() {
+        ApiResponse apiResponse = deviceService.getByIsStationFalse();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @GetMapping("/get-by-stationId/{stationId}")
+    public ResponseEntity<?> getByStationId(@PathVariable UUID stationId) {
+        ApiResponse apiResponse = deviceService.getByStationId(stationId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @GetMapping("/get-by-levelCrossingId/{levelCrossingId}")
+    public ResponseEntity<?> getByLevelCrossingId(@PathVariable UUID levelCrossingId) {
+        ApiResponse apiResponse = deviceService.getByLevelCrossingId(levelCrossingId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }
