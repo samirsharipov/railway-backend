@@ -19,4 +19,5 @@ public class DeviceDto {
     private String levelCrossingName;
     private double latitude;
     private double longitude;
+    private boolean isStation;
 }

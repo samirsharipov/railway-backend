@@ -28,4 +28,5 @@ public class Device extends AbsEntity {
 
     private double latitude;
     private double longitude;
+    private Boolean isStation;
 }

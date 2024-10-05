@@ -16,7 +16,6 @@ public class StationController {
 
     private final StationService service;
 
-
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody StationDto stationDto) {
         ApiResponse apiResponse = service.create(stationDto);
@@ -25,7 +24,7 @@ public class StationController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id, @RequestBody StationDto stationDto) {
-        ApiResponse apiResponse = service.edit(id,stationDto);
+        ApiResponse apiResponse = service.edit(id, stationDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
@@ -38,6 +37,12 @@ public class StationController {
     @GetMapping("/get-by-id/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
         ApiResponse apiResponse = service.getById(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @GetMapping("/get-by-plot-id/{plotId}")
+    public ResponseEntity<?> getByPlotId(@PathVariable UUID plotId) {
+        ApiResponse apiResponse = service.getByPlotId(plotId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 }

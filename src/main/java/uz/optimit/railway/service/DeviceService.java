@@ -77,7 +77,7 @@ public class DeviceService {
 
     private Device fromDto(DeviceDto deviceDto, Device device) {
         device.setName(deviceDto.getName());
-        device.setDescription(deviceDto.getDescription());
+        device.setDescription(deviceDto.getDescription() != null ? deviceDto.getDescription() : "");
         if (deviceDto.getStationId() != null) {
             stationRepository.findById(deviceDto.getStationId()).ifPresent(device::setStation);
         }
@@ -86,6 +86,7 @@ public class DeviceService {
         }
         device.setLongitude(deviceDto.getLongitude());
         device.setLatitude(deviceDto.getLatitude());
+        device.setIsStation(deviceDto.isStation());
         return device;
     }
 
@@ -118,5 +119,42 @@ public class DeviceService {
         List<ActionGetDto> actionGetDtoList = actionMapper.actionGetDtoList(allActions);
 
         return new ApiResponse("successfully retrieved device", true, new DeviceActionListInfoDto(deviceDto, actionGetDtoList));
+    }
+
+    public ApiResponse getByIsStationTrue() {
+        List<Device> all = repository.findAllByIsStationIsTrue();
+
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
+    }
+
+    public ApiResponse getByIsStationFalse() {
+        List<Device> all = repository.findAllByIsStationIsFalse();
+
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
+    }
+
+    public ApiResponse getByStationId(UUID stationId) {
+        List<Device> all = repository.findAllByStationId(stationId);
+
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
+    }
+
+
+    public ApiResponse getByLevelCrossingId(UUID levelCrossingId) {
+        List<Device> all = repository.findAllByLevelCrossingId(levelCrossingId);
+
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
     }
 }

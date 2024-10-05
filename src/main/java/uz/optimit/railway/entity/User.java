@@ -27,7 +27,7 @@ public class User extends AbsEntity implements UserDetails {
     private String lastName;
     private String password;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String username;
 
     @ManyToOne(optional = false)
