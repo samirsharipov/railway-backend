@@ -42,7 +42,7 @@ public class LevelCrossingService {
     }
 
     public ApiResponse getAll() {
-        List<LevelCrossing> all = levelCrossingRepository.findAll();
+        List<LevelCrossing> all = levelCrossingRepository.findAllByDeletedIsFalse();
         if (all.isEmpty())
             throw new IllegalArgumentException("level crossing not found");
 
@@ -61,12 +61,21 @@ public class LevelCrossingService {
     }
 
     public ApiResponse getByPlotId(UUID plotId) {
-        List<LevelCrossing> all = levelCrossingRepository.findAllByPlotId(plotId);
+        List<LevelCrossing> all = levelCrossingRepository.findAllByPlotIdAndDeletedIsFalse(plotId);
         if (all.isEmpty())
             throw new IllegalArgumentException("level crossing not found");
 
         return new ApiResponse("found", true, all.stream()
                 .map(levelCrossingMapper::toDto)
                 .toList());
+    }
+
+    public ApiResponse delete(UUID id) {
+        Optional<LevelCrossing> optionalLevelCrossing = levelCrossingRepository.findById(id);
+        if (optionalLevelCrossing.isEmpty())
+            return new ApiResponse("not found", false);
+        levelCrossingRepository.softDelete(id);
+
+        return new ApiResponse("deleted", true);
     }
 }

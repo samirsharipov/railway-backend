@@ -47,7 +47,7 @@ public class EnterpriseService {
     }
 
     public ApiResponse getAll() {
-        List<Enterprise> all = repository.findAll();
+        List<Enterprise> all = repository.findAllByDeletedIsFalse();
         if (all.isEmpty())
             throw new IllegalArgumentException("Enterprise list is empty");
 
@@ -63,7 +63,7 @@ public class EnterpriseService {
     }
 
     public ApiResponse getByMtu(UUID mtuId) {
-        List<Enterprise> all = repository.findAllByMtuId(mtuId);
+        List<Enterprise> all = repository.findAllByMtuIdAndDeletedIsFalse(mtuId);
         if (all.isEmpty())
             throw new IllegalArgumentException("Enterprise list is empty");
 
@@ -72,5 +72,16 @@ public class EnterpriseService {
 
     public Enterprise getEnterpriseById(UUID id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public ApiResponse delete(UUID id) {
+
+        Optional<Enterprise> optionalEnterprise = repository.findById(id);
+        if (optionalEnterprise.isEmpty())
+            return new ApiResponse("not found", false);
+
+        repository.softDelete(id);
+
+        return new ApiResponse("success", true);
     }
 }
