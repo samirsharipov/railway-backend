@@ -10,6 +10,7 @@ import uz.optimit.railway.repository.ActionRepository;
 import uz.optimit.railway.repository.DeviceRepository;
 import uz.optimit.railway.repository.LevelCrossingRepository;
 import uz.optimit.railway.repository.StationRepository;
+import uz.optimit.railway.repository.CategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class DeviceService {
     private final ActionRepository actionRepository;
     private final ActionMapper actionMapper;
     private final LevelCrossingRepository levelCrossingRepository;
+    private final CategoryRepository categoryRepository;
 
     public ApiResponse create(DeviceDto deviceDto) {
         repository.save(fromDto(deviceDto, new Device()));
@@ -62,6 +64,10 @@ public class DeviceService {
             deviceDto.setLevelCrossingId(device.getLevelCrossing().getId());
             deviceDto.setLevelCrossingName(device.getLevelCrossing().getName());
         }
+
+        if (device.getCategory() != null) {
+            deviceDto.setCategoryId(device.getCategory().getId());
+        }
         deviceDto.setLongitude(device.getLongitude());
         deviceDto.setLatitude(device.getLatitude());
         return deviceDto;
@@ -83,6 +89,9 @@ public class DeviceService {
         }
         if (deviceDto.getLevelCrossingId() != null) {
             levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
+        }
+        if (deviceDto.getCategoryId() != null) {
+            categoryRepository.findById(deviceDto.getCategoryId()).ifPresent(device::setCategory);
         }
         device.setLongitude(deviceDto.getLongitude());
         device.setLatitude(deviceDto.getLatitude());
@@ -122,7 +131,7 @@ public class DeviceService {
     }
 
     public ApiResponse getByIsStationTrue() {
-        List<Device> all = repository.findAllByIsStationIsTrue();
+        List<Device> all = repository.findAllByIsStationIsTrueAndDeletedIsFalse();
 
         if (all.isEmpty())
             return new ApiResponse("not found", false);
@@ -131,7 +140,7 @@ public class DeviceService {
     }
 
     public ApiResponse getByIsStationFalse() {
-        List<Device> all = repository.findAllByIsStationIsFalse();
+        List<Device> all = repository.findAllByIsStationIsFalseAndDeletedIsFalse();
 
         if (all.isEmpty())
             return new ApiResponse("not found", false);
@@ -140,7 +149,7 @@ public class DeviceService {
     }
 
     public ApiResponse getByStationId(UUID stationId) {
-        List<Device> all = repository.findAllByStationId(stationId);
+        List<Device> all = repository.findAllByStationIdAndDeletedIsFalse(stationId);
 
         if (all.isEmpty())
             return new ApiResponse("not found", false);
@@ -150,11 +159,31 @@ public class DeviceService {
 
 
     public ApiResponse getByLevelCrossingId(UUID levelCrossingId) {
-        List<Device> all = repository.findAllByLevelCrossingId(levelCrossingId);
+        List<Device> all = repository.findAllByLevelCrossingIdAndDeletedIsFalse(levelCrossingId);
 
         if (all.isEmpty())
             return new ApiResponse("not found", false);
 
         return new ApiResponse("found", true, toDto(all));
+    }
+
+    public ApiResponse getByCategory(UUID categoryId) {
+
+        List<Device> all = repository.findAllByCategoryIdAndDeletedIsFalse(categoryId);
+
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
+    }
+
+    public ApiResponse delete(UUID id) {
+
+        Optional<Device> optionalDevice = repository.findById(id);
+        if (optionalDevice.isEmpty())
+            return new ApiResponse("device with id " + id + " not found", false);
+
+        repository.softDelete(id);
+        return new ApiResponse("successfully deleted device", true);
     }
 }

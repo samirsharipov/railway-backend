@@ -75,4 +75,16 @@ public class DeviceController {
         ApiResponse apiResponse = deviceService.getByLevelCrossingId(levelCrossingId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    @GetMapping("/get-by-category/{categoryId}")
+    public ResponseEntity<?> getByCategory(@PathVariable UUID categoryId) {
+        ApiResponse apiResponse = deviceService.getByCategory(categoryId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        ApiResponse apiResponse = deviceService.delete(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }

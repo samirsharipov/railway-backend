@@ -45,4 +45,10 @@ public class LevelCrossingController {
         ApiResponse apiResponse = service.getByPlotId(plotId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        ApiResponse apiResponse = service.delete(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }

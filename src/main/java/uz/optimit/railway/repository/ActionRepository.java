@@ -1,6 +1,8 @@
 package uz.optimit.railway.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uz.optimit.railway.entity.Action;
@@ -17,4 +19,9 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
 
     @Query("SELECT a FROM Action a WHERE a.device.id = :deviceId AND a.done = true ORDER BY a.createdAt DESC")
     Optional<Action> findLatestDoneActionByDeviceId(@Param("deviceId") UUID deviceId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Action b SET b.deleted = true WHERE b.id = :id")
+    void softDelete(UUID id);
 }

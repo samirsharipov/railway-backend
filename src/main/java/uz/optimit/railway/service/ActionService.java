@@ -102,4 +102,13 @@ public class ActionService {
 
         return EARTH_RADIUS * c * 1000;
     }
+
+    public ApiResponse delete(UUID id) {
+        Optional<Action> optionalAction = repository.findById(id);
+        if (optionalAction.isEmpty())
+            return new ApiResponse("Not found action", false);
+
+        repository.softDelete(id);
+        return null;
+    }
 }

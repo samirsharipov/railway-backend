@@ -37,7 +37,7 @@ public class MtuService {
 
 
     public ApiResponse getAll() {
-        List<Mtu> all = mtuRepository.findAll();
+        List<Mtu> all = mtuRepository.findAllByDeletedIsFalse();
         if (all.isEmpty()) {
             return new ApiResponse("Mtu not found");
         }
@@ -57,5 +57,14 @@ public class MtuService {
 
     public Mtu getMtu(UUID id) {
         return mtuRepository.findById(id).orElse(null);
+    }
+
+    public ApiResponse delete(UUID id) {
+        Optional<Mtu> optionalMtu = mtuRepository.findById(id);
+        if (optionalMtu.isEmpty()) {
+            return new ApiResponse("Mtu not found");
+        }
+        mtuRepository.softDelete(id);
+        return new ApiResponse("Mtu deleted", true);
     }
 }

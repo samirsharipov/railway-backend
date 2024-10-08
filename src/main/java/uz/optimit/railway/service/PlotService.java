@@ -43,7 +43,7 @@ public class PlotService {
 
 
     public ApiResponse getAll() {
-        List<Plot> all = repository.findAll();
+        List<Plot> all = repository.findAllByDeletedIsFalse();
         if (all.isEmpty())
             throw new IllegalArgumentException("Plot list is empty");
 
@@ -61,7 +61,7 @@ public class PlotService {
 
 
     public ApiResponse getByEnterprise(UUID enterpriseId) {
-        List<Plot> all = repository.findAllByEnterpriseId(enterpriseId);
+        List<Plot> all = repository.findAllByEnterpriseIdAndDeletedIsFalse(enterpriseId);
         if (all.isEmpty())
             throw new IllegalArgumentException("Plot list is empty");
 
@@ -70,5 +70,13 @@ public class PlotService {
 
     public Plot findById(UUID id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public ApiResponse delete(UUID id) {
+        Optional<Plot> optionalPlot = repository.findById(id);
+        if (optionalPlot.isEmpty())
+            return new ApiResponse("not found", false);
+        repository.softDelete(id);
+        return new ApiResponse("success", true);
     }
 }

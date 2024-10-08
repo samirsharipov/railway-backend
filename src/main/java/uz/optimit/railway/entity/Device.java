@@ -26,6 +26,9 @@ public class Device extends AbsEntity {
     @ManyToOne
     private LevelCrossing levelCrossing;
 
+    @ManyToOne
+    private Category category;
+
     private double latitude;
     private double longitude;
     private Boolean isStation;
