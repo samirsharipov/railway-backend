@@ -57,6 +57,9 @@ public class DeviceService {
         deviceDto.setName(device.getName());
         deviceDto.setDescription(device.getDescription());
         if (device.getStation() != null) {
+            if (device.getStation().getId() != null) {
+                deviceDto.setPlotId(device.getStation().getId());
+            }
             deviceDto.setStationId(device.getStation().getId());
             deviceDto.setStationName(device.getStation().getName());
         }
@@ -68,6 +71,8 @@ public class DeviceService {
         if (device.getCategory() != null) {
             deviceDto.setCategoryId(device.getCategory().getId());
         }
+
+
         deviceDto.setLongitude(device.getLongitude());
         deviceDto.setLatitude(device.getLatitude());
         return deviceDto;
@@ -185,5 +190,14 @@ public class DeviceService {
 
         repository.softDelete(id);
         return new ApiResponse("successfully deleted device", true);
+    }
+
+    public ApiResponse getByPlot(UUID plotId) {
+        List<Device> all = repository.findAllByStation_PlotIdAndDeletedIsFalse(plotId);
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+
+        return new ApiResponse("found", true, toDto(all));
     }
 }

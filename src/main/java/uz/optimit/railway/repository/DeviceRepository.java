@@ -25,4 +25,6 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     @Transactional
     @Query("UPDATE Device b SET b.deleted = true WHERE b.id = :id")
     void softDelete(UUID id);
+
+    List<Device> findAllByStation_PlotIdAndDeletedIsFalse(UUID plotId);
 }

@@ -82,6 +82,12 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @GetMapping("/get-by-plot/{plotId}")
+    public ResponseEntity<?> getByPlot(@PathVariable UUID plotId) {
+        ApiResponse apiResponse = deviceService.getByPlot(plotId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         ApiResponse apiResponse = deviceService.delete(id);
