@@ -99,9 +99,13 @@ public class StationService {
 
     public ApiResponse delete(UUID id) {
         Optional<Station> optionalStation = repository.findById(id);
-        if (optionalStation.isPresent()) {
-            repository.deleteById(id);
-            return new ApiResponse("Station deleted", true);
+        try {
+            if (optionalStation.isPresent()) {
+                repository.deleteById(id);
+                return new ApiResponse("Station deleted", true);
+            }
+        } catch (Exception e) {
+            return new ApiResponse("station ga boglangan qo'rilmalar mavjud!", false);
         }
         return new ApiResponse("Station not found", false);
     }
