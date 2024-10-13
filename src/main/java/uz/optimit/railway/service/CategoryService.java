@@ -26,6 +26,7 @@ public class CategoryService {
     private static Category fromDto(CategoryDto categoryDto, Category category) {
         category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
+        category.setCheckDay(categoryDto.getCheckDay());
         return category;
     }
 
@@ -66,6 +67,7 @@ public class CategoryService {
         categoryDto.setId(category.getId());
         categoryDto.setName(category.getName());
         categoryDto.setDescription(category.getDescription());
+        categoryDto.setCheckDay(category.getCheckDay());
         return categoryDto;
     }
 

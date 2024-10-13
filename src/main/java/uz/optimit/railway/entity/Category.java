@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import uz.optimit.railway.entity.template.AbsEntity;
 
+import java.sql.Timestamp;
+
 
 @Getter
 @Setter
@@ -17,4 +19,5 @@ public class Category extends AbsEntity {
 
     private String description;
 
+    private int checkDay;
 }

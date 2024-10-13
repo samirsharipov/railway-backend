@@ -12,6 +12,10 @@ import uz.optimit.railway.repository.LevelCrossingRepository;
 import uz.optimit.railway.repository.StationRepository;
 import uz.optimit.railway.repository.CategoryRepository;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +76,26 @@ public class DeviceService {
             deviceDto.setCategoryId(device.getCategory().getId());
         }
 
+        List<Action> all
+                = actionRepository.findAllByDeviceIdOrderByCreatedAtDesc(device.getId());
+
+        for (Action action : all) {
+            Timestamp doneTime = action.getDoneTime();
+
+            LocalDateTime dateTime =
+                    Instant.ofEpochMilli(doneTime.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+            int checkDay = device.getCategory().getCheckDay();
+            // 7 kun qo'shamiz
+            LocalDateTime newDate = dateTime.plusDays(checkDay);
+
+            // Bugungi sanani olamiz
+            LocalDateTime today = LocalDateTime.now();
+
+            deviceDto.setCheck(newDate.isAfter(today));
+
+            break;
+        }
 
         deviceDto.setLongitude(device.getLongitude());
         deviceDto.setLatitude(device.getLatitude());

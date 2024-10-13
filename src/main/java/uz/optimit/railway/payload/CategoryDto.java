@@ -13,4 +13,5 @@ public class CategoryDto {
     private UUID id;
     private String name;
     private String description;
+    private int checkDay;
 }
