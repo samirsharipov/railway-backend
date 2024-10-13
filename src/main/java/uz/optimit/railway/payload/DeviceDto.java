@@ -22,4 +22,5 @@ public class DeviceDto {
     private double latitude;
     private double longitude;
     private boolean isStation;
+    private boolean isCheck;
 }
