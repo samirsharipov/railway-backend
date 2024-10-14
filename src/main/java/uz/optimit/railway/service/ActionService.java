@@ -109,6 +109,6 @@ public class ActionService {
             return new ApiResponse("Not found action", false);
 
         repository.softDelete(id);
-        return null;
+        return new ApiResponse("success", true);
     }
 }
