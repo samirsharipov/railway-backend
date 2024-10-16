@@ -3,6 +3,7 @@ package uz.optimit.railway.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.optimit.railway.entity.Action;
+import uz.optimit.railway.entity.Category;
 import uz.optimit.railway.entity.Device;
 import uz.optimit.railway.mapper.ActionMapper;
 import uz.optimit.railway.payload.*;
@@ -120,11 +121,14 @@ public class DeviceService {
             levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
         }
         if (deviceDto.getCategoryId() != null) {
-            categoryRepository.findById(deviceDto.getCategoryId()).ifPresent(device::setCategory);
+            Optional<Category> optionalCategory = categoryRepository.findById(deviceDto.getCategoryId());
+            if (optionalCategory.isPresent()) {
+                device.setCategory(optionalCategory.get());
+                device.setIsStation(optionalCategory.get().isStation());
+            }
         }
         device.setLongitude(deviceDto.getLongitude());
         device.setLatitude(deviceDto.getLatitude());
-        device.setIsStation(deviceDto.isStation());
         return device;
     }
 
@@ -157,24 +161,6 @@ public class DeviceService {
         List<ActionGetDto> actionGetDtoList = actionMapper.actionGetDtoList(allActions);
 
         return new ApiResponse("successfully retrieved device", true, new DeviceActionListInfoDto(deviceDto, actionGetDtoList));
-    }
-
-    public ApiResponse getByIsStationTrue() {
-        List<Device> all = repository.findAllByIsStationIsTrueAndDeletedIsFalse();
-
-        if (all.isEmpty())
-            return new ApiResponse("not found", false);
-
-        return new ApiResponse("found", true, toDto(all));
-    }
-
-    public ApiResponse getByIsStationFalse() {
-        List<Device> all = repository.findAllByIsStationIsFalseAndDeletedIsFalse();
-
-        if (all.isEmpty())
-            return new ApiResponse("not found", false);
-
-        return new ApiResponse("found", true, toDto(all));
     }
 
     public ApiResponse getByStationId(UUID stationId) {
@@ -216,11 +202,16 @@ public class DeviceService {
         return new ApiResponse("successfully deleted device", true);
     }
 
-    public ApiResponse getByPlot(UUID plotId) {
-        List<Device> all = repository.findAllByStation_PlotIdAndDeletedIsFalse(plotId);
+    public ApiResponse getByPlot(UUID plotId, boolean isStation) {
+        List<Device> all;
+
+        if (isStation)
+            all = repository.findAllByStation_PlotIdAndIsStationIsTrueAndDeletedIsFalse(plotId);
+        else
+            all = repository.findAllByStation_PlotIdAndIsStationIsFalseAndDeletedIsFalse(plotId);
+
         if (all.isEmpty())
             return new ApiResponse("not found", false);
-
 
         return new ApiResponse("found", true, toDto(all));
     }

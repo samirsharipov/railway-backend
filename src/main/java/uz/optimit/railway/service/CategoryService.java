@@ -7,6 +7,7 @@ import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.CategoryDto;
 import uz.optimit.railway.repository.CategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-    private final CategoryRepository repository;
 
+    private final CategoryRepository repository;
 
     public ApiResponse create(CategoryDto categoryDto) {
         Category category = fromDto(categoryDto, new Category());
@@ -27,6 +28,7 @@ public class CategoryService {
         category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
         category.setCheckDay(categoryDto.getCheckDay());
+        category.setStation(categoryDto.isStation());
         return category;
     }
 
@@ -68,6 +70,7 @@ public class CategoryService {
         categoryDto.setName(category.getName());
         categoryDto.setDescription(category.getDescription());
         categoryDto.setCheckDay(category.getCheckDay());
+        categoryDto.setStation(category.isStation());
         return categoryDto;
     }
 
@@ -82,5 +85,20 @@ public class CategoryService {
 
         repository.softDelete(id);
         return new ApiResponse("success", true);
+    }
+
+    public ApiResponse getByIsStation(boolean isStation) {
+
+        List<Category> all;
+
+        if (isStation) {
+            all = repository.findAllByStationIsTrueAndDeletedIsFalse();
+        } else {
+            all = repository.findAllByStationIsFalseAndDeletedIsFalse();
+        }
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
+        return new ApiResponse("success", true, toDto(all));
     }
 }

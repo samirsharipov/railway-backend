@@ -44,4 +44,10 @@ public class CategoryController {
         ApiResponse apiResponse = service.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    @GetMapping("get-by-is-station/{isStation}")
+    public ResponseEntity<?> getByIsStation(@PathVariable boolean isStation) {
+        ApiResponse apiResponse = service.getByIsStation(isStation);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }
