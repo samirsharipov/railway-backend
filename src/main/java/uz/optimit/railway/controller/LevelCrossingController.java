@@ -40,7 +40,7 @@ public class LevelCrossingController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("/get-by-plot/{plotId}")
+    @GetMapping("/get-by-plot-id/{plotId}")
     public ResponseEntity<?> getByPlotId(@PathVariable UUID plotId) {
         ApiResponse apiResponse = service.getByPlotId(plotId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);

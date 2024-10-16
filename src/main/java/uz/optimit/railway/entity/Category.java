@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import uz.optimit.railway.entity.template.AbsEntity;
 
+import javax.swing.border.AbstractBorder;
 import java.sql.Timestamp;
 
 
@@ -20,4 +21,6 @@ public class Category extends AbsEntity {
     private String description;
 
     private int checkDay;
+
+    private boolean station;
 }

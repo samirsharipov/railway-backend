@@ -52,18 +52,6 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("/get-by-isStation-true")
-    public ResponseEntity<?> getByIsStationTrue() {
-        ApiResponse apiResponse = deviceService.getByIsStationTrue();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
-
-    @GetMapping("/get-by-isStation-false")
-    public ResponseEntity<?> getByIsStationFalse() {
-        ApiResponse apiResponse = deviceService.getByIsStationFalse();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
-
     @GetMapping("/get-by-stationId/{stationId}")
     public ResponseEntity<?> getByStationId(@PathVariable UUID stationId) {
         ApiResponse apiResponse = deviceService.getByStationId(stationId);
@@ -82,9 +70,10 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("/get-by-plot/{plotId}")
-    public ResponseEntity<?> getByPlot(@PathVariable UUID plotId) {
-        ApiResponse apiResponse = deviceService.getByPlot(plotId);
+    @GetMapping("/get-by-plot/{plotId}/{isStation}")
+    public ResponseEntity<?> getByPlot(@PathVariable UUID plotId,
+                                       @PathVariable boolean isStation) {
+        ApiResponse apiResponse = deviceService.getByPlot(plotId,isStation);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 

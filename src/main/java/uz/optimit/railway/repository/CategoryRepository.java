@@ -17,4 +17,8 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     void softDelete(UUID id);
 
     List<Category> findAllByDeletedIsFalse();
+
+    List<Category> findAllByStationIsFalseAndDeletedIsFalse();
+
+    List<Category> findAllByStationIsTrueAndDeletedIsFalse();
 }

@@ -27,4 +27,8 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     void softDelete(UUID id);
 
     List<Device> findAllByStation_PlotIdAndDeletedIsFalse(UUID plotId);
+
+    List<Device> findAllByStation_PlotIdAndIsStationIsTrueAndDeletedIsFalse(UUID plotId);
+
+    List<Device> findAllByStation_PlotIdAndIsStationIsFalseAndDeletedIsFalse(UUID plotId);
 }
