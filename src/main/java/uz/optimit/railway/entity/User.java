@@ -4,14 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.optimit.railway.entity.template.AbsEntity;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "users")
+@Entity(name = "users1")
 @Builder
 public class User extends AbsEntity implements UserDetails {
 
