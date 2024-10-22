@@ -24,7 +24,7 @@ public class LevelCrossingController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody LevelCrossingDto levelCrossingDto) {
-        ApiResponse apiResponse = service.update(id,levelCrossingDto);
+        ApiResponse apiResponse = service.update(id, levelCrossingDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
