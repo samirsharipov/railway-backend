@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "users1")
+@Entity(name = "users")
 @Builder
 public class User extends AbsEntity implements UserDetails {
 
