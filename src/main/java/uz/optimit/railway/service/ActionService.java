@@ -34,7 +34,7 @@ public class ActionService {
 
     public ApiResponse getByUserDone(UUID userId) {
         List<Action> allActions =
-                repository.findAllByUserIdAndDoneIsFalse(userId);
+                repository.findAllByUserIdAndDoneIsFalseOrderByCreatedAtDesc(userId);
 
         if (allActions.isEmpty())
             return new ApiResponse("Not found actions", false);
@@ -46,7 +46,7 @@ public class ActionService {
 
     public ApiResponse getByUserDoneTrue(UUID userId) {
         List<Action> allActions =
-                repository.findAllByUserIdAndDoneIsTrue(userId);
+                repository.findAllByUserIdAndDoneIsTrueOrderByCreatedAtDesc(userId);
 
         if (allActions.isEmpty())
             return new ApiResponse("Not found actions", false);
