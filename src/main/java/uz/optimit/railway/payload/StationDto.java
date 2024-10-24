@@ -15,6 +15,7 @@ public class StationDto {
     private String description;
     private String address;
     private UUID plotId;
+    private String plotName;
     private double latitude;
     private double longitude;
 }

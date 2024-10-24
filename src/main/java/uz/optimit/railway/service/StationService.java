@@ -77,6 +77,7 @@ public class StationService {
         stationDto.setLatitude(station.getLatitude());
         stationDto.setLongitude(station.getLongitude());
         stationDto.setPlotId(station.getPlot() != null ? station.getPlot().getId() : null);
+        stationDto.setPlotName(station.getPlot() != null ? station.getPlot().getName() : null);
         return stationDto;
     }
 

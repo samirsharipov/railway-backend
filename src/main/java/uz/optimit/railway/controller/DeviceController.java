@@ -82,4 +82,10 @@ public class DeviceController {
         ApiResponse apiResponse = deviceService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    @GetMapping("get-by-category-plot/{categoryId}/{plotId}")
+    public ResponseEntity<?> getByCategoryPlot(@PathVariable UUID categoryId, @PathVariable UUID plotId) {
+        ApiResponse apiResponse = deviceService.getByCategoryPlot(categoryId,plotId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }
