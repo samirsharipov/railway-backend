@@ -101,4 +101,10 @@ public class CategoryService {
 
         return new ApiResponse("success", true, toDto(all));
     }
+
+    public ApiResponse getByCategoryPlot(UUID categoryId, UUID plotId) {
+
+
+        return null;
+    }
 }

@@ -36,7 +36,8 @@ public class LevelCrossingMapper {
                 entity.getAddress(),
                 entity.getLatitude() != null ? entity.getLongitude() : null,
                 entity.getLongitude() != null ? entity.getLongitude() : null,
-                entity.getPlot() != null ? entity.getPlot().getId() : null
+                entity.getPlot() != null ? entity.getPlot().getId() : null,
+                entity.getPlot() != null ? entity.getPlot().getName() : null
         );
     }
 

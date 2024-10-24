@@ -11,9 +11,6 @@ import java.util.UUID;
 
 public interface DeviceRepository extends JpaRepository<Device, UUID> {
 
-    List<Device> findAllByIsStationIsFalseAndDeletedIsFalse();
-
-    List<Device> findAllByIsStationIsTrueAndDeletedIsFalse();
 
     List<Device> findAllByStationIdAndDeletedIsFalse(UUID stationId);
 
@@ -26,9 +23,9 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     @Query("UPDATE Device b SET b.deleted = true WHERE b.id = :id")
     void softDelete(UUID id);
 
-    List<Device> findAllByStation_PlotIdAndDeletedIsFalse(UUID plotId);
-
     List<Device> findAllByStation_PlotIdAndIsStationIsTrueAndDeletedIsFalse(UUID plotId);
 
     List<Device> findAllByStation_PlotIdAndIsStationIsFalseAndDeletedIsFalse(UUID plotId);
+
+    List<Device> findAllByStation_IdAndStation_Plot_IdAndDeletedIsFalse(UUID stationId, UUID plotId);
 }

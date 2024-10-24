@@ -3,12 +3,9 @@ package uz.optimit.railway.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.optimit.railway.entity.Enterprise;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.EnterpriseDto;
-import uz.optimit.railway.payload.MtuDto;
 import uz.optimit.railway.service.EnterpriseService;
-import uz.optimit.railway.service.MtuService;
 
 import java.util.UUID;
 
