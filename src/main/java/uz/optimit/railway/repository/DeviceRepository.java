@@ -27,5 +27,7 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
 
     List<Device> findAllByStation_PlotIdAndIsStationIsFalseAndDeletedIsFalse(UUID plotId);
 
-    List<Device> findAllByStation_IdAndStation_Plot_IdAndDeletedIsFalse(UUID stationId, UUID plotId);
+    List<Device> findAllByCategory_idAndStation_Plot_IdAndDeletedIsFalse(UUID categoryId, UUID plotId);
+
+    List<Device> findAllByCategory_idAndStation_Plot_IdAndStation_IdAndDeletedIsFalse(UUID category_id, UUID station_plot_id, UUID station_id);
 }
