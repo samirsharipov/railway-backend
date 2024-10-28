@@ -216,9 +216,13 @@ public class DeviceService {
         return new ApiResponse("found", true, toDto(all));
     }
 
-    public ApiResponse getByCategoryPlot(UUID categoryId, UUID plotId) {
+    public ApiResponse getByCategoryPlot(UUID categoryId, UUID plotId, UUID stationId) {
 
-        List<Device> all = repository.findAllByStation_IdAndStation_Plot_IdAndDeletedIsFalse(categoryId, plotId);
+        List<Device> all = new ArrayList<>();
+        if (stationId == null)
+            all = repository.findAllByCategory_idAndStation_Plot_IdAndDeletedIsFalse(categoryId, plotId);
+        else
+            all = repository.findAllByCategory_idAndStation_Plot_IdAndStation_IdAndDeletedIsFalse(categoryId, plotId, stationId);
         if (all.isEmpty())
             return new ApiResponse("not found", false);
 

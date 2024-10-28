@@ -84,8 +84,12 @@ public class DeviceController {
     }
 
     @GetMapping("get-by-category-plot/{categoryId}/{plotId}")
-    public ResponseEntity<?> getByCategoryPlot(@PathVariable UUID categoryId, @PathVariable UUID plotId) {
-        ApiResponse apiResponse = deviceService.getByCategoryPlot(categoryId,plotId);
+    public ResponseEntity<?> getByCategoryPlot(@PathVariable UUID categoryId,
+                                               @PathVariable UUID plotId,
+                                               @RequestParam(required = false) UUID stationId) {
+        ApiResponse apiResponse = deviceService.getByCategoryPlot(categoryId,plotId,stationId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+
 }
