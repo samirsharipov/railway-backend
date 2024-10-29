@@ -63,7 +63,7 @@ public class DeviceService {
         deviceDto.setDescription(device.getDescription());
         if (device.getStation() != null) {
             if (device.getStation().getId() != null) {
-                deviceDto.setPlotId(device.getStation().getId());
+                deviceDto.setPlotId(device.getStation().getPlot().getId());
             }
             deviceDto.setStationId(device.getStation().getId());
             deviceDto.setStationName(device.getStation().getName());
