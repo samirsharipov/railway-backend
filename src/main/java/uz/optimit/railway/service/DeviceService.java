@@ -62,13 +62,12 @@ public class DeviceService {
         deviceDto.setName(device.getName());
         deviceDto.setDescription(device.getDescription());
         if (device.getStation() != null) {
-            if (device.getStation().getId() != null) {
-                deviceDto.setPlotId(device.getStation().getPlot().getId());
-            }
+            deviceDto.setPlotId(device.getStation().getPlot().getId());
             deviceDto.setStationId(device.getStation().getId());
             deviceDto.setStationName(device.getStation().getName());
         }
         if (device.getLevelCrossing() != null) {
+            deviceDto.setPlotId(device.getLevelCrossing().getPlot().getId());
             deviceDto.setLevelCrossingId(device.getLevelCrossing().getId());
             deviceDto.setLevelCrossingName(device.getLevelCrossing().getName());
         }
