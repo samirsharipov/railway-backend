@@ -16,7 +16,6 @@ import uz.optimit.railway.entity.template.AbsEntity;
 public class Peregon extends AbsEntity {
     private String name;
     private String description;
-    private String address;
     private double latitude;
     private double longitude;
 

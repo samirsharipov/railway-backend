@@ -11,7 +11,6 @@ public class PeregonDto {
     private UUID id;
     private String name;
     private String description;
-    private String address;
     private UUID plotId;
     private String plotName;
     private double latitude;

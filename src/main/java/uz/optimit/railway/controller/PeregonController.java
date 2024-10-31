@@ -3,12 +3,9 @@ package uz.optimit.railway.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.optimit.railway.entity.Peregon;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.PeregonDto;
-import uz.optimit.railway.payload.StationDto;
 import uz.optimit.railway.service.PeregonService;
-import uz.optimit.railway.service.StationService;
 
 import java.util.UUID;
 
@@ -48,6 +45,7 @@ public class PeregonController {
         ApiResponse apiResponse = service.getByPlotId(plotId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         ApiResponse apiResponse = service.delete(id);

@@ -72,7 +72,6 @@ public class PeregonService {
         peregonDto.setId(peregon.getId());
         peregonDto.setName(peregon.getName());
         peregonDto.setDescription(peregon.getDescription());
-        peregonDto.setAddress(peregon.getAddress());
         peregonDto.setLatitude(peregon.getLatitude());
         peregonDto.setLongitude(peregon.getLongitude());
         peregonDto.setPlotId(peregon.getPlot() != null ? peregon.getPlot().getId() : null);
@@ -83,7 +82,6 @@ public class PeregonService {
     private static Peregon fromDto(PeregonDto peregonDto, Peregon peregon) {
         peregon.setName(peregonDto.getName());
         peregon.setDescription(peregonDto.getDescription());
-        peregon.setAddress(peregonDto.getAddress());
         peregon.setLatitude(peregonDto.getLatitude());
         peregon.setLongitude(peregonDto.getLongitude());
         return peregon;
