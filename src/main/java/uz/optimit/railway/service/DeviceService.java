@@ -7,11 +7,7 @@ import uz.optimit.railway.entity.Category;
 import uz.optimit.railway.entity.Device;
 import uz.optimit.railway.mapper.ActionMapper;
 import uz.optimit.railway.payload.*;
-import uz.optimit.railway.repository.ActionRepository;
-import uz.optimit.railway.repository.DeviceRepository;
-import uz.optimit.railway.repository.LevelCrossingRepository;
-import uz.optimit.railway.repository.StationRepository;
-import uz.optimit.railway.repository.CategoryRepository;
+import uz.optimit.railway.repository.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -31,6 +27,7 @@ public class DeviceService {
     private final ActionMapper actionMapper;
     private final LevelCrossingRepository levelCrossingRepository;
     private final CategoryRepository categoryRepository;
+    private final PeregonRepository peregonRepository;
 
     public ApiResponse create(DeviceDto deviceDto) {
         repository.save(fromDto(deviceDto, new Device()));
@@ -70,6 +67,11 @@ public class DeviceService {
             deviceDto.setPlotId(device.getLevelCrossing().getPlot().getId());
             deviceDto.setLevelCrossingId(device.getLevelCrossing().getId());
             deviceDto.setLevelCrossingName(device.getLevelCrossing().getName());
+        }
+        if (device.getPeregon() != null) {
+            deviceDto.setPlotId(device.getPeregon().getPlot().getId());
+            deviceDto.setPeregonId(device.getPeregon().getId());
+            deviceDto.setPeregonName(device.getPeregon().getName());
         }
 
         if (device.getCategory() != null) {
@@ -118,6 +120,9 @@ public class DeviceService {
         }
         if (deviceDto.getLevelCrossingId() != null) {
             levelCrossingRepository.findById(deviceDto.getLevelCrossingId()).ifPresent(device::setLevelCrossing);
+        }
+        if (deviceDto.getPeregonId() != null) {
+            peregonRepository.findById(deviceDto.getPeregonId()).ifPresent(device::setPeregon);
         }
         if (deviceDto.getCategoryId() != null) {
             Optional<Category> optionalCategory = categoryRepository.findById(deviceDto.getCategoryId());
@@ -224,6 +229,16 @@ public class DeviceService {
             all = repository.findAllByCategory_idAndStation_Plot_IdAndStation_IdAndDeletedIsFalse(categoryId, plotId, stationId);
         if (all.isEmpty())
             return new ApiResponse("not found", false);
+
+        return new ApiResponse("found", true, toDto(all));
+    }
+
+    public ApiResponse getByPeregon(UUID peregonId) {
+
+        List<Device> all = repository.findAllByPeregonIdAndDeletedIsFalse(peregonId);
+        if (all.isEmpty())
+            return new ApiResponse("not found", false);
+
 
         return new ApiResponse("found", true, toDto(all));
     }
