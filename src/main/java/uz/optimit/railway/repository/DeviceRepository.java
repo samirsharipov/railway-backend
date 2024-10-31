@@ -17,6 +17,7 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     List<Device> findAllByLevelCrossingIdAndDeletedIsFalse(UUID levelCrossingId);
 
     List<Device> findAllByCategoryIdAndDeletedIsFalse(UUID categoryId);
+    List<Device> findAllByPeregonIdAndDeletedIsFalse(UUID peregonId);
 
     @Modifying
     @Transactional

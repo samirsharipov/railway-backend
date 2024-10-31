@@ -17,7 +17,9 @@ public class DeviceDto {
     private UUID levelCrossingId;
     private UUID categoryId;
     private UUID plotId;
+    private UUID peregonId;
     private String stationName;
+    private String peregonName;
     private String levelCrossingName;
     private double latitude;
     private double longitude;

@@ -70,6 +70,12 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @GetMapping("/get-by-peregon/{peregonId}")
+    public ResponseEntity<?> getByPeregon(@PathVariable UUID peregonId) {
+        ApiResponse apiResponse = deviceService.getByPeregon(peregonId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
     @GetMapping("/get-by-plot/{plotId}/{isStation}")
     public ResponseEntity<?> getByPlot(@PathVariable UUID plotId,
                                        @PathVariable boolean isStation) {
@@ -90,6 +96,4 @@ public class DeviceController {
         ApiResponse apiResponse = deviceService.getByCategoryPlot(categoryId,plotId,stationId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
-
 }

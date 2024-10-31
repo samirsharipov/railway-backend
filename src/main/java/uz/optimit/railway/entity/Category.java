@@ -4,10 +4,6 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import uz.optimit.railway.entity.template.AbsEntity;
 
-import javax.swing.border.AbstractBorder;
-import java.sql.Timestamp;
-
-
 @Getter
 @Setter
 @ToString
