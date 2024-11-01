@@ -99,8 +99,10 @@ public class CategoryService {
             all = repository.findAllByStationIsTrueAndDeletedIsFalse();
         else if (isLevelCrossing)
             all = repository.findAllByLevelCrossingIsTrueAndDeletedIsFalse();
-        else
+        else if (isPeregon)
             all = repository.findAllByPeregonIsTrueAndDeletedIsFalse();
+        else
+            all = new ArrayList<>();
 
         if (all.isEmpty())
             return new ApiResponse("not found", false);
