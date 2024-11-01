@@ -18,9 +18,11 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     List<Category> findAllByDeletedIsFalse();
 
-    List<Category> findAllByStationIsFalseAndDeletedIsFalse();
+    List<Category> findAllByLevelCrossingIsTrueAndDeletedIsFalse();
 
     List<Category> findAllByStationIsTrueAndDeletedIsFalse();
+
+    List<Category> findAllByPeregonIsTrueAndDeletedIsFalse();
 
 
 }

@@ -19,4 +19,8 @@ public class Category extends AbsEntity {
     private int checkDay;
 
     private boolean station;
+
+    private boolean levelCrossing;
+
+    private boolean peregon;
 }

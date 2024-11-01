@@ -15,4 +15,6 @@ public class CategoryDto {
     private String description;
     private int checkDay;
     private boolean isStation;
+    private boolean isPeregon;
+    private boolean isLevelCrossing;
 }
