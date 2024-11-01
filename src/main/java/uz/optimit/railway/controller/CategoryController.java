@@ -45,9 +45,11 @@ public class CategoryController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("get-by-is-station/{isStation}")
-    public ResponseEntity<?> getByIsStation(@PathVariable boolean isStation) {
-        ApiResponse apiResponse = service.getByIsStation(isStation);
+    @GetMapping("get-by-is-station/{isStation}/{isLevelCrossing}/{isPeregon}")
+    public ResponseEntity<?> getByIsStation(@PathVariable boolean isStation,
+                                            @PathVariable boolean isLevelCrossing,
+                                            @PathVariable boolean isPeregon) {
+        ApiResponse apiResponse = service.getByIsStation(isStation,isLevelCrossing,isPeregon);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 }

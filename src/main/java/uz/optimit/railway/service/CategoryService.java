@@ -29,6 +29,8 @@ public class CategoryService {
         category.setDescription(categoryDto.getDescription());
         category.setCheckDay(categoryDto.getCheckDay());
         category.setStation(categoryDto.isStation());
+        category.setPeregon(categoryDto.isPeregon());
+        category.setLevelCrossing(categoryDto.isLevelCrossing());
         return category;
     }
 
@@ -71,6 +73,8 @@ public class CategoryService {
         categoryDto.setDescription(category.getDescription());
         categoryDto.setCheckDay(category.getCheckDay());
         categoryDto.setStation(category.isStation());
+        categoryDto.setPeregon(category.isPeregon());
+        categoryDto.setLevelCrossing(category.isLevelCrossing());
         return categoryDto;
     }
 
@@ -87,24 +91,20 @@ public class CategoryService {
         return new ApiResponse("success", true);
     }
 
-    public ApiResponse getByIsStation(boolean isStation) {
+    public ApiResponse getByIsStation(boolean isStation, boolean isLevelCrossing, boolean isPeregon) {
 
         List<Category> all;
 
-        if (isStation) {
+        if (isStation)
             all = repository.findAllByStationIsTrueAndDeletedIsFalse();
-        } else {
-            all = repository.findAllByStationIsFalseAndDeletedIsFalse();
-        }
+        else if (isLevelCrossing)
+            all = repository.findAllByLevelCrossingIsTrueAndDeletedIsFalse();
+        else
+            all = repository.findAllByPeregonIsTrueAndDeletedIsFalse();
+
         if (all.isEmpty())
             return new ApiResponse("not found", false);
 
         return new ApiResponse("success", true, toDto(all));
-    }
-
-    public ApiResponse getByCategoryPlot(UUID categoryId, UUID plotId) {
-
-
-        return null;
     }
 }
