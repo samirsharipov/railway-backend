@@ -20,6 +20,9 @@ public class Employee extends AbsEntity {
     @ManyToOne
     private Enterprise enterprise;
 
+    @ManyToOne
+    private Attachment attachment;
+
     private String jshshir;
 
     private String role;

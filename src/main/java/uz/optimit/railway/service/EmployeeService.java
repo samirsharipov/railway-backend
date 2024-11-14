@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.optimit.railway.entity.Employee;
-import uz.optimit.railway.entity.Enterprise;
-import uz.optimit.railway.entity.Role;
-import uz.optimit.railway.entity.User;
+import org.springframework.web.multipart.MultipartFile;
+import uz.optimit.railway.entity.*;
 import uz.optimit.railway.mapper.EmployeeMapper;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.EmployeeDto;
@@ -16,6 +14,8 @@ import uz.optimit.railway.repository.EnterpriseRepository;
 import uz.optimit.railway.repository.RoleRepository;
 import uz.optimit.railway.repository.UserRepository;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,22 +29,38 @@ public class EmployeeService {
     private final RoleRepository roleRepository;
     private final EnterpriseRepository enterpriseRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AttachmentService attachmentService;
 
-    public ApiResponse create(EmployeeDto employeeDto) {
+
+    public ApiResponse create(EmployeeDto employeeDto, MultipartFile file) throws IOException {
 
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
+
 
         User user = new User();
         toUser(employeeDto, user, role);
         user = userRepository.save(user);
 
         Employee employee = new Employee();
+        try {
+            setAttachment(file, employee);
+        } catch (IOException e) {
+            return new ApiResponse("Faylni yuklashda xatolik yuz berdi", false);
+        }
+        setAttachment(file, employee);
         repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
         return new ApiResponse("Employee created", true);
     }
 
-    public ApiResponse update(UUID id, EmployeeDto employeeDto) {
+    private void setAttachment(MultipartFile file, Employee employee) throws IOException {
+        if (!file.isEmpty()) {
+            Attachment attachment = attachmentService.attachmentCreate(file);
+            employee.setAttachment(attachment);
+        }
+    }
+
+    public ApiResponse update(UUID id, EmployeeDto employeeDto, MultipartFile file) throws IOException {
         Employee employee = findByIdOrThrow(repository, id, "Employee");
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
@@ -52,6 +68,12 @@ public class EmployeeService {
         User user = employee.getUser();
         toUser(employeeDto, user, role);
         userRepository.save(user);
+
+        try {
+            setAttachment(file, employee);
+        } catch (IOException e) {
+            return new ApiResponse("Faylni yuklashda xatolik yuz berdi", false);
+        }
 
         repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
 

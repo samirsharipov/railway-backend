@@ -23,4 +23,6 @@ public class EmployeeDto {
     private String jshshir;
 
     private String position;
+
+    private UUID attachmentId;
 }

@@ -26,6 +26,12 @@ public class AttachmentService {
         if (file.isEmpty())
             return new ApiResponse("File is empty", false);
 
+        Attachment attachment = attachmentCreate(file);
+
+        return new ApiResponse("Attachment saved", true);
+    }
+
+    public Attachment attachmentCreate(MultipartFile file) throws IOException {
         Attachment attachment = new Attachment();
         attachment.setFileOriginalName(file.getOriginalFilename());
         attachment.setSize(file.getSize());
@@ -37,8 +43,7 @@ public class AttachmentService {
         attachmentContent.setMainContent(file.getBytes());
         attachmentContent.setAttachment(savedAttachment);
         attachmentContentRepository.save(attachmentContent);
-
-        return new ApiResponse("Attachment saved", true);
+        return savedAttachment;
     }
 
     public ApiResponse download(UUID id, HttpServletResponse response) throws IOException {
