@@ -25,6 +25,7 @@ public class EmployeeMapper {
         dto.setEnterpriseId(employee.getEnterprise().getId());
         dto.setJshshir(employee.getJshshir());
         dto.setPosition(employee.getRole());
+        dto.setAttachmentId(employee.getAttachment().getId());
         return dto;
     }
 }

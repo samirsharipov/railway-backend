@@ -2,11 +2,14 @@ package uz.optimit.railway.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.EmployeeDto;
+import uz.optimit.railway.service.AttachmentService;
 import uz.optimit.railway.service.EmployeeService;
 
 import java.util.List;
@@ -19,15 +22,17 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
+    @SneakyThrows
     @PostMapping
-    public ResponseEntity<ApiResponse> create(@RequestBody EmployeeDto employeeDto) {
-        ApiResponse apiResponse = employeeService.create(employeeDto);
+    public ResponseEntity<ApiResponse> create(@RequestBody EmployeeDto employeeDto, @RequestParam("file") MultipartFile file) {
+        ApiResponse apiResponse = employeeService.create(employeeDto ,file);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT).body(apiResponse);
     }
 
+    @SneakyThrows
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(@PathVariable UUID id, @RequestBody EmployeeDto employeeDto) {
-        ApiResponse apiResponse = employeeService.update(id, employeeDto);
+    public ResponseEntity<ApiResponse> update(@PathVariable UUID id, @RequestBody EmployeeDto employeeDto,@RequestParam("file") MultipartFile file) {
+        ApiResponse apiResponse = employeeService.update(id, employeeDto, file);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
     }
 
