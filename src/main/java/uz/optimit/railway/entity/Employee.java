@@ -1,7 +1,9 @@
 package uz.optimit.railway.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import uz.optimit.railway.entity.template.AbsEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(indexes = {@Index(columnList = "enterpriseId")})
 public class Employee extends AbsEntity {
 
     private String fio;

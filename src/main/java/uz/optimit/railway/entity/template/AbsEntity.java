@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
+@Where(clause = "deleted = false")
 public abstract class AbsEntity implements Serializable {
     @Id
     @GeneratedValue
