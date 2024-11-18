@@ -14,7 +14,6 @@ import uz.optimit.railway.repository.EnterpriseRepository;
 import uz.optimit.railway.repository.RoleRepository;
 import uz.optimit.railway.repository.UserRepository;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -29,10 +28,9 @@ public class EmployeeService {
     private final RoleRepository roleRepository;
     private final EnterpriseRepository enterpriseRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AttachmentService attachmentService;
 
 
-    public ApiResponse create(EmployeeDto employeeDto, MultipartFile file) throws IOException {
+    public ApiResponse create(EmployeeDto employeeDto) {
 
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
@@ -42,38 +40,30 @@ public class EmployeeService {
         toUser(employeeDto, user, role);
         user = userRepository.save(user);
 
-        Employee employee = new Employee();
-        try {
-            setAttachment(file, employee);
-        } catch (IOException e) {
-            return new ApiResponse("Faylni yuklashda xatolik yuz berdi", false);
+        if (employeeDto.getAttachmentId()!=null) {
+            Attachment attachment = new Attachment();
+            attachment.setId(employeeDto.getAttachmentId());
         }
-        setAttachment(file, employee);
+
+        Employee employee = new Employee();
         repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
         return new ApiResponse("Employee created", true);
     }
 
-    private void setAttachment(MultipartFile file, Employee employee) throws IOException {
-        if (!file.isEmpty()) {
-            Attachment attachment = attachmentService.attachmentCreate(file);
-            employee.setAttachment(attachment);
-        }
-    }
 
-    public ApiResponse update(UUID id, EmployeeDto employeeDto, MultipartFile file) throws IOException {
+    public ApiResponse update(UUID id, EmployeeDto employeeDto) throws IOException {
         Employee employee = findByIdOrThrow(repository, id, "Employee");
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
 
         User user = employee.getUser();
         toUser(employeeDto, user, role);
+        if (employeeDto.getAttachmentId()!=null) {
+            Attachment attachment = new Attachment();
+            attachment.setId(employeeDto.getAttachmentId());
+        }
         userRepository.save(user);
 
-        try {
-            setAttachment(file, employee);
-        } catch (IOException e) {
-            return new ApiResponse("Faylni yuklashda xatolik yuz berdi", false);
-        }
 
         repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
 
