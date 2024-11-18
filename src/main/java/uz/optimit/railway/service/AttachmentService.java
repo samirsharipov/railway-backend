@@ -28,7 +28,7 @@ public class AttachmentService {
 
         Attachment attachment = attachmentCreate(file);
 
-        return new ApiResponse("Attachment saved", true);
+        return new ApiResponse("Attachment saved", true ,attachment.getId());
     }
 
     public Attachment attachmentCreate(MultipartFile file) throws IOException {
