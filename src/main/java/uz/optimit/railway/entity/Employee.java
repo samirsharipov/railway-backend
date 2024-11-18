@@ -1,11 +1,10 @@
 package uz.optimit.railway.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import uz.optimit.railway.entity.template.AbsEntity;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +18,9 @@ public class Employee extends AbsEntity {
 
     @ManyToOne
     private Enterprise enterprise;
+
+    @ManyToMany
+    private List<Station> station;
 
     @ManyToOne
     private Attachment attachment;

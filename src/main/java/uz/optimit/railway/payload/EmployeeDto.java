@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,6 +20,8 @@ public class EmployeeDto {
     private UUID roleId;
 
     private UUID enterpriseId;
+
+    private List<UUID> stationIdList;
 
     private String jshshir;
 

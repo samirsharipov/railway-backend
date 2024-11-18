@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import uz.optimit.railway.entity.*;
+import uz.optimit.railway.entity.template.Identifiable;
 import uz.optimit.railway.mapper.EmployeeMapper;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.EmployeeDto;
-import uz.optimit.railway.repository.EmployeeRepository;
-import uz.optimit.railway.repository.EnterpriseRepository;
-import uz.optimit.railway.repository.RoleRepository;
-import uz.optimit.railway.repository.UserRepository;
+import uz.optimit.railway.repository.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,25 +26,27 @@ public class EmployeeService {
     private final RoleRepository roleRepository;
     private final EnterpriseRepository enterpriseRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StationRepository stationRepository;
 
 
     public ApiResponse create(EmployeeDto employeeDto) {
 
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
+        List<Station> station = findByIdsOrThrow(stationRepository, employeeDto.getStationIdList(), "Station");
 
 
         User user = new User();
         toUser(employeeDto, user, role);
         user = userRepository.save(user);
 
-        if (employeeDto.getAttachmentId()!=null) {
+        if (employeeDto.getAttachmentId() != null) {
             Attachment attachment = new Attachment();
             attachment.setId(employeeDto.getAttachmentId());
         }
 
         Employee employee = new Employee();
-        repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
+        repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user, station));
         return new ApiResponse("Employee created", true);
     }
 
@@ -55,17 +55,19 @@ public class EmployeeService {
         Employee employee = findByIdOrThrow(repository, id, "Employee");
         Role role = findByIdOrThrow(roleRepository, employeeDto.getRoleId(), "Role");
         Enterprise enterprise = findByIdOrThrow(enterpriseRepository, employeeDto.getEnterpriseId(), "Enterprise");
+        List<Station> station = findByIdsOrThrow(stationRepository, employeeDto.getStationIdList(), "Station");
+
 
         User user = employee.getUser();
         toUser(employeeDto, user, role);
-        if (employeeDto.getAttachmentId()!=null) {
+        if (employeeDto.getAttachmentId() != null) {
             Attachment attachment = new Attachment();
             attachment.setId(employeeDto.getAttachmentId());
         }
         userRepository.save(user);
 
 
-        repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user));
+        repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user, station));
 
         return new ApiResponse("Employee updated", true);
     }
@@ -108,4 +110,20 @@ public class EmployeeService {
         return repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(entityName + " not found"));
     }
+
+    public static <T> List<T> findByIdsOrThrow(JpaRepository<T, UUID> repository, List<UUID> ids, String entityName) {
+        List<T> result = repository.findAllById(ids);
+
+        // Agar topilgan elementlar ro'yxati id'lar ro'yxatiga teng bo'lmasa, demak, ba'zi id'lar topilmadi.
+        if (result.size() != ids.size()) {
+            Set<UUID> foundIds = result.stream().map(entity -> ((Identifiable) entity).getId()).collect(Collectors.toSet());
+            for (UUID id : ids) {
+                if (!foundIds.contains(id)) {
+                    throw new IllegalArgumentException(entityName + " with ID " + id + " not found");
+                }
+            }
+        }
+        return result;
+    }
+
 }
