@@ -1,5 +1,7 @@
 package uz.optimit.railway.anotations;
 
+import uz.optimit.railway.enums.Permission;
+
 import java.lang.annotation.*;
 
 @Documented
