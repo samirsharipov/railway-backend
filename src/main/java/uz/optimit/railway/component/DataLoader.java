@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.optimit.railway.entity.Job;
 import uz.optimit.railway.entity.Role;
+import uz.optimit.railway.entity.RolePermissions;
 import uz.optimit.railway.entity.User;
 import uz.optimit.railway.enums.Permission;
 import uz.optimit.railway.enums.RoleType;
@@ -69,6 +70,16 @@ public class DataLoader implements CommandLineRunner {
             User adminUser = userFactorySingleton.createUser("Samir", "Sharipov", "admin", passwordEncoder.encode("123"), admin);
             userRepository.saveAll(Arrays.asList(superAdminUser, adminUser));
 
+            List<Role> roles = Arrays.asList(
+                    new Role("SHCH", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHCHG", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHCHD", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHCHZ", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHCHU", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHCHI", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch")
+            );
+
+            roleRepository.saveAll(roles);
 
         }
     }
