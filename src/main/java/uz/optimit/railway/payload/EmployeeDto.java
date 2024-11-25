@@ -22,6 +22,8 @@ public class EmployeeDto {
 
     private UUID roleId;
 
+    private String roleName;
+
     private UUID enterpriseId;
 
     private List<UUID> stationIdList;

@@ -37,6 +37,7 @@ public class EmployeeMapper {
             dto.setPassword(employee.getUser().getPassword());
             if (employee.getUser().getRole() != null) {
                 dto.setRoleId(employee.getUser().getRole().getId());
+                dto.setRoleName(employee.getUser().getRole().getName());
             }
         }
 
@@ -46,6 +47,7 @@ public class EmployeeMapper {
 
         dto.setJshshir(employee.getJshshir());
         dto.setPosition(employee.getRole());
+
 
         if (employee.getAttachment() != null) {
             dto.setAttachmentId(employee.getAttachment().getId());
