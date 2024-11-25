@@ -13,6 +13,7 @@ import uz.optimit.railway.repository.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class EmployeeService {
     private final EnterpriseRepository enterpriseRepository;
     private final PasswordEncoder passwordEncoder;
     private final StationRepository stationRepository;
+    private final AttachmentRepository attachmentRepository;
 
 
     public ApiResponse create(EmployeeDto employeeDto) {
@@ -40,12 +42,12 @@ public class EmployeeService {
         toUser(employeeDto, user, role);
         user = userRepository.save(user);
 
+        Employee employee = new Employee();
         if (employeeDto.getAttachmentId() != null) {
-            Attachment attachment = new Attachment();
-            attachment.setId(employeeDto.getAttachmentId());
+            Optional<Attachment> optionalAttachment = attachmentRepository.findById(employeeDto.getAttachmentId());
+            optionalAttachment.ifPresent(employee::setAttachment);
         }
 
-        Employee employee = new Employee();
         repository.save(EmployeeMapper.toEntity(employee, employeeDto, enterprise, user, station));
         return new ApiResponse("Employee created", true);
     }
@@ -60,9 +62,10 @@ public class EmployeeService {
 
         User user = employee.getUser();
         toUser(employeeDto, user, role);
+
         if (employeeDto.getAttachmentId() != null) {
-            Attachment attachment = new Attachment();
-            attachment.setId(employeeDto.getAttachmentId());
+            Optional<Attachment> optionalAttachment = attachmentRepository.findById(employeeDto.getAttachmentId());
+            optionalAttachment.ifPresent(employee::setAttachment);
         }
         userRepository.save(user);
 
