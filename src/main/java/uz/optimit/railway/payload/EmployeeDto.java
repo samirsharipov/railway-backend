@@ -11,6 +11,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeDto {
+
+    private UUID id;
+
     private String firstName;
 
     private String lastName;

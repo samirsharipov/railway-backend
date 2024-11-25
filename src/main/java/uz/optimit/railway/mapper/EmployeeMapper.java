@@ -31,6 +31,7 @@ public class EmployeeMapper {
 
         // Null tekshiruvi bilan to'ldirish
         if (employee.getUser() != null) {
+            dto.setId(employee.getId());
             dto.setFirstName(employee.getUser().getFirstName());
             dto.setLastName(employee.getUser().getLastName());
             dto.setPassword(employee.getUser().getPassword());
