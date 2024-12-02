@@ -76,7 +76,10 @@ public class DataLoader implements CommandLineRunner {
                     new Role("SHCHD", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
                     new Role("SHCHZ", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
                     new Role("SHCHU", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
-                    new Role("SHCHI", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch")
+                    new Role("SHCHI", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
+                    new Role("SHNS", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHNS"),
+                    new Role("SHN", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHN"),
+                    new Role("SHSM", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHSM")
             );
 
             roleRepository.saveAll(roles);
