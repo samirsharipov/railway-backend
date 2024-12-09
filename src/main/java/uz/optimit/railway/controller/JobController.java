@@ -5,8 +5,7 @@ import org.hibernate.StatelessSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.optimit.railway.anotations.CheckPermission;
-import uz.optimit.railway.payload.ApiResponse;
-import uz.optimit.railway.payload.JobDto;
+import uz.optimit.railway.payload.*;
 import uz.optimit.railway.service.JobService;
 
 import java.util.UUID;
@@ -26,9 +25,9 @@ public class JobController {
     }
 
     @CheckPermission("GET_JOB")
-    @GetMapping("/getAll")
-    public ResponseEntity<ApiResponse> getAll() {
-        ApiResponse apiResponse = jobService.getAll();
+    @GetMapping("/getAll/{stationId}")
+    public ResponseEntity<ApiResponse> getAll(@PathVariable UUID stationId,@RequestParam boolean daily) {
+        ApiResponse apiResponse = jobService.getAll(stationId,daily);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
@@ -46,11 +45,36 @@ public class JobController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @CheckPermission("CONFIRM_JOB")
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<?> confirm(@PathVariable UUID id,@RequestBody JobConfirmDto dto) {
+        ApiResponse apiResponse = jobService.confirm(id,dto);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @CheckPermission("DONE_JOB")
+    @PutMapping("/done/{id}")
+    public ResponseEntity<?> done(@PathVariable UUID id,@RequestBody JobDoneDto dto) {
+        ApiResponse apiResponse = jobService.done(id,dto);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @CheckPermission("PAUSE_JOB")
+    @PutMapping("/pause/{id}")
+    public ResponseEntity<?> pause(@PathVariable UUID id,@RequestBody JobPauseDto dto) {
+        ApiResponse apiResponse = jobService.pause(id,dto);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+
+
     @CheckPermission("DELETE_JOB")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         ApiResponse apiResponse = jobService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+
 
 }
