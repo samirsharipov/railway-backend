@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import uz.optimit.railway.entity.Job;
-import uz.optimit.railway.entity.Role;
-import uz.optimit.railway.entity.RolePermissions;
-import uz.optimit.railway.entity.User;
+import uz.optimit.railway.entity.*;
 import uz.optimit.railway.enums.Permission;
 import uz.optimit.railway.enums.RoleType;
 import uz.optimit.railway.factory.RoleFactorySingleton;
 import uz.optimit.railway.factory.UserFactorySingleton;
+import uz.optimit.railway.repository.JobExampleRepository;
 import uz.optimit.railway.repository.JobRepository;
 import uz.optimit.railway.repository.RoleRepository;
 import uz.optimit.railway.repository.UserRepository;
@@ -28,6 +26,7 @@ public class DataLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JobExampleRepository jobExampleRepository;
 
     @Value("${spring.sql.init.mode}")
     private String initMode;
@@ -51,11 +50,11 @@ public class DataLoader implements CommandLineRunner {
             );
 
             for (String text : texts) {
-                Job job = new Job();
-                job.setName(text);
-                job.setDescription("");
-                jobRepository.save(job);
+              JobExample example = new JobExample();
+              example.setName(text);
+              jobExampleRepository.save(example);
             }
+
 
             UserFactorySingleton userFactorySingleton = UserFactorySingleton.getInstance();
             RoleFactorySingleton roleFactorySingleton = RoleFactorySingleton.getInstance();
