@@ -1,7 +1,6 @@
 package uz.optimit.railway.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.StatelessSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.optimit.railway.anotations.CheckPermission;
@@ -26,8 +25,10 @@ public class JobController {
 
     @CheckPermission("GET_JOB")
     @GetMapping("/getAll/{stationId}")
-    public ResponseEntity<ApiResponse> getAll(@PathVariable UUID stationId,@RequestParam boolean daily) {
-        ApiResponse apiResponse = jobService.getAll(stationId,daily);
+    public ResponseEntity<ApiResponse> getAll(@PathVariable UUID stationId,
+                                              @RequestParam boolean daily,
+                                              @RequestParam String status) {
+        ApiResponse apiResponse = jobService.getAll(stationId,daily,status);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
@@ -66,15 +67,10 @@ public class JobController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-
-
     @CheckPermission("DELETE_JOB")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         ApiResponse apiResponse = jobService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
-
-
 }

@@ -13,6 +13,7 @@ import uz.optimit.railway.repository.UserRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,14 +57,39 @@ public class JobService {
     /**
      * Kunduzi yoki yillik ishlarni olish
      */
-    public ApiResponse getAll(UUID stationId, boolean daily) {
+    public ApiResponse getAll(UUID stationId, boolean daily, String status) {
         // Vaqtni hisoblaymiz (universal qism)
         TimeRange timeRange = daily ? getDailyTimeRange() : getYearlyTimeRange();
+        List<Job> jobs = new ArrayList<>();
 
-        // Joblarni olish
-        List<Job> jobs = daily
-                ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
-                : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+        switch (status) {
+            case "all":
+                jobs = daily
+                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
+                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+                break;
+
+            case "rejected":
+                jobs = daily
+                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime())
+                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime());
+                break;
+
+            case "done":
+                jobs = daily
+                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime())
+                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime());
+                break;
+
+            case "paused":
+                jobs = daily
+                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
+                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Noto'g'ri status: " + status);
+        }
 
         // Joblarni DTO'ga o'zgartirish
         List<JobDto> jobDtos = jobs.stream().map(this::mapToDto).collect(Collectors.toList());
@@ -212,8 +238,8 @@ public class JobService {
     }
 
     /**
-         * Vaqt oralig'ini saqlash uchun ichki sinf
-         */
-        private record TimeRange(Timestamp startTime, Timestamp endTime) {
+     * Vaqt oralig'ini saqlash uchun ichki sinf
+     */
+    private record TimeRange(Timestamp startTime, Timestamp endTime) {
     }
 }
