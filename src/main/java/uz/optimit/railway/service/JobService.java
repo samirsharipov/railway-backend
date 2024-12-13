@@ -13,7 +13,6 @@ import uz.optimit.railway.repository.UserRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,6 +40,7 @@ public class JobService {
         Job job = new Job();
         job.setName(dto.getName());
         job.setDescription(dto.getDescription());
+        job.setCreatedBy(dto.getCreatedBy());
         job.setStartTime(dto.getStartTime());
         job.setDoneTime(null);
         job.setConfirmUser(null);
@@ -60,40 +60,25 @@ public class JobService {
     public ApiResponse getAll(UUID stationId, boolean daily, String status) {
         // Vaqtni hisoblaymiz (universal qism)
         TimeRange timeRange = daily ? getDailyTimeRange() : getYearlyTimeRange();
-        List<Job> jobs = new ArrayList<>();
-
-        switch (status) {
-            case "all":
-                jobs = daily
-                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
-                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
-                break;
-
-            case "rejected":
-                jobs = daily
-                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime())
-                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime());
-                break;
-
-            case "done":
-                jobs = daily
-                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime())
-                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime());
-                break;
-
-            case "paused":
-                jobs = daily
-                        ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
-                        : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
-                break;
-
-            default:
-                throw new IllegalArgumentException("Noto'g'ri status: " + status);
-        }
+        List<Job> jobs = switch (status) {
+            case "all" -> daily
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+            case "rejected" -> daily
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime());
+            case "done" -> daily
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime());
+            case "paused" -> daily
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+            default -> throw new IllegalArgumentException("Noto'g'ri status: " + status);
+        };
 
         // Joblarni DTO'ga o'zgartirish
-        List<JobDto> jobDtos = jobs.stream().map(this::mapToDto).collect(Collectors.toList());
-        return new ApiResponse("Muvaffaqiyatli topildi", true, jobDtos);
+        List<JobGetDto> jobDtoList = jobs.stream().map(this::mapToGetDto).collect(Collectors.toList());
+        return new ApiResponse("Muvaffaqiyatli topildi", true, jobDtoList);
     }
 
     /**
@@ -122,7 +107,7 @@ public class JobService {
         if (optionalJob.isEmpty()) {
             return new ApiResponse("Job topilmadi", false);
         }
-        JobDto jobDto = mapToDto(optionalJob.get());
+        JobGetDto jobDto = mapToGetDto(optionalJob.get());
         return new ApiResponse("Muvaffaqiyatli topildi", true, jobDto);
     }
 
@@ -167,23 +152,25 @@ public class JobService {
         return new ApiResponse("Job muvaffaqiyatli o'chirildi", true);
     }
 
-    /**
-     * Jobni Dto'ga o'tkazish
-     */
-    private JobDto mapToDto(Job job) {
-        return new JobDto(
-                job.getName(),
-                job.getDescription(),
-                job.getStartTime(),
-                job.getDoneTime(),
-                job.getConfirmUser().getId(),
-                job.getDoneOrPausedUser() != null ? job.getDoneOrPausedUser().getId() : null,
-                job.getStation().getId(),
-                job.isYearJob(),
-                job.isDone(),
-                job.isPaused()
-        );
+    private JobGetDto mapToGetDto(Job job) {
+        JobGetDto dto = new JobGetDto();
+        dto.setId(job.getId());
+        dto.setCreatedAt(job.getCreatedAt());
+        dto.setName(job.getName());
+        dto.setDescription(job.getDescription());
+        dto.setStartTime(job.getStartTime());
+        dto.setDoneTime(job.getDoneTime());
+        userRepository.findById(job.getCreatedBy()).ifPresent(user -> dto.setCreatedBy(user.getFirstName() + " " + user.getLastName()));
+        dto.setStation(job.getStation().getName());
+        dto.setDoneOrPausedUser(job.getDoneOrPausedUser() != null ? job.getDoneOrPausedUser().getFirstName() + " " + job.getDoneOrPausedUser().getLastName() : null);
+        dto.setConfirmUser(job.getConfirmUser() != null ? job.getConfirmUser().getFirstName() + " " + job.getConfirmUser().getLastName() : null);
+        dto.setYearJob(job.isYearJob());
+        dto.setDone(job.isDone());
+        dto.setPaused(job.isPaused());
+        dto.setConfirm(job.isConfirm());
+        return dto;
     }
+
 
     public ApiResponse confirm(UUID id, JobConfirmDto dto) {
         Optional<Job> optionalJob = jobRepository.findById(id);
@@ -198,6 +185,7 @@ public class JobService {
         Job job = optionalJob.get();
         job.setConfirm(dto.isConfirmed());
         job.setConfirmUser(optionalUser.get());
+        job.setDescription(dto.getDescription());
         jobRepository.save(job);
         return new ApiResponse("Saqlandi", true);
     }

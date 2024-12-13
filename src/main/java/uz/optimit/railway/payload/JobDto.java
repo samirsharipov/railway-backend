@@ -9,6 +9,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class JobDto {
+    private UUID id;
+    private UUID createdBy;
     private String name;
     private String description;
     private Timestamp startTime;
