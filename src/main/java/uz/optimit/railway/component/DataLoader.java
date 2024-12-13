@@ -11,11 +11,9 @@ import uz.optimit.railway.enums.Permission;
 import uz.optimit.railway.enums.RoleType;
 import uz.optimit.railway.factory.RoleFactorySingleton;
 import uz.optimit.railway.factory.UserFactorySingleton;
-import uz.optimit.railway.repository.JobExampleRepository;
-import uz.optimit.railway.repository.JobRepository;
-import uz.optimit.railway.repository.RoleRepository;
-import uz.optimit.railway.repository.UserRepository;
+import uz.optimit.railway.repository.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +25,7 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JobExampleRepository jobExampleRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Value("${spring.sql.init.mode}")
     private String initMode;
@@ -50,9 +49,9 @@ public class DataLoader implements CommandLineRunner {
             );
 
             for (String text : texts) {
-              JobExample example = new JobExample();
-              example.setName(text);
-              jobExampleRepository.save(example);
+                JobExample example = new JobExample();
+                example.setName(text);
+                jobExampleRepository.save(example);
             }
 
 
@@ -72,16 +71,48 @@ public class DataLoader implements CommandLineRunner {
             List<Role> roles = Arrays.asList(
                     new Role("SHCH", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
                     new Role("SHCHG", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
-                    new Role("SHCHD", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
                     new Role("SHCHZ", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
                     new Role("SHCHU", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
-                    new Role("SHCHI", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch"),
-                    new Role("SHNS", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHNS"),
-                    new Role("SHN", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHN"),
-                    new Role("SHSM", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "SHSM")
+                    new Role("SHCHI", RoleType.EMPLOYEE, RolePermissions.ONLY_VIEW, "shch")
             );
 
+
+            Role shns = roleFactorySingleton.createRole("SHNS", RoleType.EMPLOYEE, RolePermissions.SHNS, "SHNS");
+            Role shn = roleFactorySingleton.createRole("SHN", RoleType.EMPLOYEE, RolePermissions.SHN_SHSM, "SHN");
+            Role shsm = roleFactorySingleton.createRole("SHSM", RoleType.EMPLOYEE, RolePermissions.SHN_SHSM, "SHSM");
+            Role shchd = roleFactorySingleton.createRole("SHCHD", RoleType.EMPLOYEE, RolePermissions.SHCHD, "shch");
             roleRepository.saveAll(roles);
+            roleRepository.saveAll(Arrays.asList(shns, shn, shsm, shchd));
+
+            User shnUser = userFactorySingleton.createUser("shn", "shn", "shn", passwordEncoder.encode("123"), shn);
+            User shnsUser = userFactorySingleton.createUser("shns", "shns", "shns", passwordEncoder.encode("123"), shns);
+            User shnsmUser = userFactorySingleton.createUser("shnsm", "shnsm", "shnsm", passwordEncoder.encode("123"), shsm);
+            User shchdUser = userFactorySingleton.createUser("shchd", "shchd", "shchd", passwordEncoder.encode("123"), shchd);
+            userRepository.saveAll(Arrays.asList(shnUser, shnsUser, shchdUser, shnsmUser));
+
+            Employee shnsEmployee = new Employee();
+            shnsEmployee.setFio("shns fio");
+            shnsEmployee.setRole("shns");
+            shnsEmployee.setUser(shnsUser);
+            employeeRepository.save(shnsEmployee);
+
+            Employee shsmEmployee = new Employee();
+            shsmEmployee.setFio("shsm fio");
+            shsmEmployee.setRole("shsm");
+            shsmEmployee.setUser(shnsmUser);
+            employeeRepository.save(shsmEmployee);
+
+            Employee shnEmployee = new Employee();
+            shnEmployee.setFio("shn fio");
+            shnEmployee.setRole("shn");
+            shnEmployee.setUser(shnUser);
+            employeeRepository.save(shnEmployee);
+
+            Employee shchdEmployee = new Employee();
+            shchdEmployee.setFio("shchd fio");
+            shchdEmployee.setRole("shchd");
+            shchdEmployee.setUser(shchdUser);
+            employeeRepository.save(shchdEmployee);
 
         }
     }

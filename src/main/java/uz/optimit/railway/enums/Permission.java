@@ -36,11 +36,6 @@ public enum Permission {
     DELETE_PLOT,
     EDIT_PLOT,
 
-    GET_JOB,
-    ADD_JOB,
-    DELETE_JOB,
-    EDIT_JOB,
-
     GET_ROLE,
     ADD_ROLE,
     DELETE_ROLE,
@@ -59,5 +54,15 @@ public enum Permission {
     GET_EMPLOYEE,
     ADD_EMPLOYEE,
     DELETE_EMPLOYEE,
-    EDIT_EMPLOYEE
+    EDIT_EMPLOYEE,
+
+    GET_JOB,
+    ADD_JOB,
+    DELETE_JOB,
+    EDIT_JOB,
+    CONFIRM_JOB,
+    DONE_JOB,
+    PAUSE_JOB,
+
+    JOB_EXAMPLE
 }

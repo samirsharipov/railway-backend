@@ -12,4 +12,5 @@ import java.util.UUID;
 public class JobConfirmDto {
     private boolean confirmed;
     private UUID userId;
+    private String description;
 }
