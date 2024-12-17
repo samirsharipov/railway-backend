@@ -29,7 +29,8 @@ public class SecurityConfig {
                                     "/swagger-ui/**",
                                     "/swagger-ui.html",
                                     "/api/device/get-info-for-QR/*",
-                                    "/api/attachment/**")
+                                    "/api/attachment/**",
+                                    "/api/action/check-user")
                             .permitAll();
                     auth.requestMatchers("/api/auth/login").permitAll();
                     auth.anyRequest().authenticated();
