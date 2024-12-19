@@ -11,8 +11,9 @@ import java.util.UUID;
 
 public interface StationRepository extends JpaRepository<Station, UUID> {
 
-    List<Station> findAllByPlotIdAndDeletedIsFalse(UUID plotId);
-    List<Station> findAllByDeletedIsFalse();
+    List<Station> findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(UUID plotId);
+
+    List<Station> findAllByDeletedIsFalseOrderByCreatedAtDesc();
 
     @Modifying
     @Transactional

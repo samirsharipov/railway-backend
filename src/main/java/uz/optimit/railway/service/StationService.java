@@ -44,7 +44,7 @@ public class StationService {
     }
 
     public ApiResponse getAll() {
-        List<Station> stations = repository.findAllByDeletedIsFalse();
+        List<Station> stations = repository.findAllByDeletedIsFalseOrderByCreatedAtDesc();
         if (stations.isEmpty())
             return new ApiResponse("not found stations", false);
 
@@ -60,7 +60,7 @@ public class StationService {
 
 
     public ApiResponse getByPlotId(UUID plotId) {
-        List<Station> all = repository.findAllByPlotIdAndDeletedIsFalse(plotId);
+        List<Station> all = repository.findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(plotId);
 
         if (all.isEmpty())
             return new ApiResponse("not found stations", false);
