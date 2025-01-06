@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PeregonRepository extends JpaRepository<Peregon, UUID> {
-    List<Peregon> findAllByDeletedIsFalse();
+    List<Peregon> findAllByDeletedIsFalseOrderByCreatedAtDesc();
 
-    List<Peregon> findAllByPlotIdAndDeletedIsFalse(UUID plotId);
+    List<Peregon> findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(UUID plotId);
 }

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LevelCrossingRepository extends JpaRepository<LevelCrossing, UUID> {
-    List<LevelCrossing> findAllByPlotIdAndDeletedIsFalse(UUID plotId);
+    List<LevelCrossing> findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(UUID plotId);
 
-    List<LevelCrossing> findAllByDeletedIsFalse();
+    List<LevelCrossing> findAllByDeletedIsFalseOrderByCreatedAtDesc();
 
     @Modifying
     @Transactional

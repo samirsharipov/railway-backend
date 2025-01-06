@@ -44,7 +44,7 @@ public class PeregonService {
     }
 
     public ApiResponse getAll() {
-        List<Peregon> perogons = repository.findAllByDeletedIsFalse();
+        List<Peregon> perogons = repository.findAllByDeletedIsFalseOrderByCreatedAtDesc();
         if (perogons.isEmpty())
             return new ApiResponse("not found perogons", false);
 
@@ -59,7 +59,7 @@ public class PeregonService {
     }
 
     public ApiResponse getByPlotId(UUID plotId) {
-        List<Peregon> all = repository.findAllByPlotIdAndDeletedIsFalse(plotId);
+        List<Peregon> all = repository.findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(plotId);
 
         if (all.isEmpty())
             return new ApiResponse("not found perogons", false);
