@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ActionService {
     private final ActionRepository repository;
     private final ActionMapper mapper;
-    private static final double EARTH_RADIUS = 6371;
+    private static final double EARTH_RADIUS = 6371000;
     private final DeviceRepository deviceRepository;
 
     public ApiResponse create(ActionDto actionDto) {
@@ -110,5 +110,13 @@ public class ActionService {
 
         repository.softDelete(id);
         return new ApiResponse("success", true);
+    }
+
+    public ApiResponse getFiler(UUID peregonId, UUID stationId, UUID levelCrossingId) {
+        List<Action> all = repository.findActionsByFilters(peregonId, stationId, levelCrossingId);
+        if (all.isEmpty())
+            return new ApiResponse("Not found actions", false);
+        List<ActionGetDto> actionGetDtoList = mapper.actionGetDtoList(all);
+        return new ApiResponse("found", true, actionGetDtoList);
     }
 }
