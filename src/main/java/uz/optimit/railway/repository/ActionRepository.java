@@ -24,4 +24,14 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
     @Transactional
     @Query("UPDATE Action b SET b.deleted = true WHERE b.id = :id")
     void softDelete(UUID id);
+
+    @Query("SELECT a FROM Action a WHERE " +
+            "(a.device.peregon.id = :peregonId OR :peregon IS NULL) AND " +
+            "(a.device.levelCrossing.id = :levelCrossingId OR :levelCrossing IS NULL) AND " +
+            "(a.device.station.id = :stationId OR :station IS NULL)")
+    List<Action> findActionsByFilters(
+            @Param("peregon") UUID peregonId,
+            @Param("levelCrossing") UUID levelCrossingId,
+            @Param("station") UUID stationId
+    );
 }
