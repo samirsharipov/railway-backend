@@ -34,4 +34,6 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
             @Param("levelCrossing") UUID levelCrossingId,
             @Param("station") UUID stationId
     );
+
+    List<Action> findAllByDeviceIdAndDoneIsFalseOrderByCreatedAtDesc(UUID deviceId);
 }

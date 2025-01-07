@@ -112,8 +112,8 @@ public class ActionService {
         return new ApiResponse("success", true);
     }
 
-    public ApiResponse getFiler(UUID peregonId, UUID stationId, UUID levelCrossingId) {
-        List<Action> all = repository.findActionsByFilters(peregonId, stationId, levelCrossingId);
+    public ApiResponse getFiler(UUID deviceId) {
+        List<Action> all = repository.findAllByDeviceIdAndDoneIsFalseOrderByCreatedAtDesc(deviceId);
         if (all.isEmpty())
             return new ApiResponse("Not found actions", false);
         List<ActionGetDto> actionGetDtoList = mapper.actionGetDtoList(all);
