@@ -60,13 +60,9 @@ public class ActionController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("/action-get-filter")
-    public ResponseEntity<?> getFilter(@RequestParam(required = false) UUID peregonId,
-                                       @RequestParam(required = false) UUID stationId,
-                                       @RequestParam(required = false) UUID levelCrossingId) {
-        ApiResponse apiResponse = service.getFiler(peregonId, stationId, levelCrossingId);
+    @GetMapping("/action-get-filter/{deviceId}")
+    public ResponseEntity<?> getFilter(@PathVariable UUID deviceId) {
+        ApiResponse apiResponse = service.getFiler(deviceId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
-
 }
