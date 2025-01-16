@@ -2,16 +2,15 @@ package uz.optimit.railway.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.optimit.railway.entity.Employee;
 import uz.optimit.railway.entity.Station;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.StationDto;
+import uz.optimit.railway.repository.EmployeeRepository;
 import uz.optimit.railway.repository.PlotRepository;
 import uz.optimit.railway.repository.StationRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +18,7 @@ public class StationService {
 
     private final StationRepository repository;
     private final PlotRepository plotRepository;
+    private final EmployeeRepository employeeRepository;
 
     public ApiResponse create(StationDto stationDto) {
         Station station = fromDto(stationDto, new Station());
@@ -109,5 +109,18 @@ public class StationService {
             return new ApiResponse("station ga boglangan qo'rilmalar mavjud!", false);
         }
         return new ApiResponse("Station not found", false);
+    }
+
+    public ApiResponse getByUserId(UUID userId) {
+        List<Employee> all = employeeRepository.findAllByUserId(userId);
+        if (all.isEmpty())
+            return new ApiResponse("not found station", false);
+        Set<Station> allStations = new HashSet<>();
+        for (Employee employee : all) {
+            allStations.addAll(employee.getStation());
+        }
+        List<StationDto> stationDtoList = toDto(allStations.stream().toList());
+
+        return new ApiResponse("stations", true, stationDtoList);
     }
 }

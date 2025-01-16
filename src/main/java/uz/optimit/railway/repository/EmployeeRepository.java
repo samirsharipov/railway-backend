@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     List<Employee> findAllByEnterpriseId(UUID id);
+    List<Employee> findAllByUserId(UUID id);
 }

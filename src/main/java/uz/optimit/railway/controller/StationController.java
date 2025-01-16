@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.optimit.railway.anotations.CheckPermission;
-import uz.optimit.railway.enums.Permission;
 import uz.optimit.railway.payload.ApiResponse;
 import uz.optimit.railway.payload.StationDto;
 import uz.optimit.railway.service.StationService;
@@ -57,6 +56,13 @@ public class StationController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         ApiResponse apiResponse = service.delete(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @CheckPermission("GET_STATION")
+    @GetMapping("/get-by-user-id/{userId}")
+    public ResponseEntity<?> getByEmployeeId(@PathVariable UUID userId) {
+        ApiResponse apiResponse = service.getByUserId(userId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 }

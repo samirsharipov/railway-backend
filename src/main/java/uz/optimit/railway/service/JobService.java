@@ -183,6 +183,9 @@ public class JobService {
         }
 
         Job job = optionalJob.get();
+        if (job.isConfirm()) {
+            return new ApiResponse("Ish alaqachon tasdiqlangan", false);
+        }
         job.setConfirm(dto.isConfirmed());
         job.setConfirmUser(optionalUser.get());
         job.setDescription(dto.getDescription());
