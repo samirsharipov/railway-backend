@@ -87,7 +87,12 @@ public class DataLoader implements CommandLineRunner {
             User shnsUser = userFactorySingleton.createUser("shns", "shns", "shns", passwordEncoder.encode("123"), shns);
             User shnsmUser = userFactorySingleton.createUser("shnsm", "shnsm", "shnsm", passwordEncoder.encode("123"), shsm);
             User shchdUser = userFactorySingleton.createUser("shchd", "shchd", "shchd", passwordEncoder.encode("123"), shchd);
-            userRepository.saveAll(Arrays.asList(shnUser, shnsUser, shchdUser, shnsmUser));
+
+
+            shnUser = userRepository.save(shnUser);
+            shnsUser = userRepository.save(shnsUser);
+            shnsmUser = userRepository.save(shnsmUser);
+            shchdUser = userRepository.save(shchdUser);
 
             Employee shnsEmployee = new Employee();
             shnsEmployee.setFio("shns fio");

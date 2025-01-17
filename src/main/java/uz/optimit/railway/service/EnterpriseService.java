@@ -49,7 +49,7 @@ public class EnterpriseService {
     public ApiResponse getAll() {
         List<Enterprise> all = repository.findAllByDeletedIsFalse();
         if (all.isEmpty())
-            throw new IllegalArgumentException("Enterprise list is empty");
+            return new ApiResponse("not found", false);
 
         return new ApiResponse("success", true, mapper.toDto(all));
     }
@@ -65,7 +65,7 @@ public class EnterpriseService {
     public ApiResponse getByMtu(UUID mtuId) {
         List<Enterprise> all = repository.findAllByMtuIdAndDeletedIsFalse(mtuId);
         if (all.isEmpty())
-            throw new IllegalArgumentException("Enterprise list is empty");
+            return new ApiResponse("Enterprise list is empty",false);
 
         return new ApiResponse("success", true, mapper.toDto(all));
     }

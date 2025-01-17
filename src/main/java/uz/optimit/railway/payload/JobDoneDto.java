@@ -12,4 +12,5 @@ import java.util.UUID;
 public class JobDoneDto {
     private boolean done;
     private UUID userId;
+    private String message;
 }

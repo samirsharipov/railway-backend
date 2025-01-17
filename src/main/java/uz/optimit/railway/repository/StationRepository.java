@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import uz.optimit.railway.entity.Station;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface StationRepository extends JpaRepository<Station, UUID> {
@@ -14,6 +15,8 @@ public interface StationRepository extends JpaRepository<Station, UUID> {
     List<Station> findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(UUID plotId);
 
     List<Station> findAllByDeletedIsFalseOrderByCreatedAtDesc();
+
+    Optional<Station> findByPlotIdAndIdAndDeletedIsFalse(UUID plotId, UUID stationId);
 
     @Modifying
     @Transactional

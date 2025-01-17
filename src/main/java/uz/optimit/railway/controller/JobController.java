@@ -7,6 +7,7 @@ import uz.optimit.railway.anotations.CheckPermission;
 import uz.optimit.railway.payload.*;
 import uz.optimit.railway.service.JobService;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @RestController
@@ -23,12 +24,12 @@ public class JobController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_JOB")
     @GetMapping("/getAll/{stationId}")
     public ResponseEntity<ApiResponse> getAll(@PathVariable UUID stationId,
                                               @RequestParam boolean daily,
-                                              @RequestParam String status) {
-        ApiResponse apiResponse = jobService.getAll(stationId,daily,status);
+                                              @RequestParam String status,
+                                              @RequestParam Timestamp date) {
+        ApiResponse apiResponse = jobService.getAll(stationId,daily,status,date);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 

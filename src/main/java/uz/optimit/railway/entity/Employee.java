@@ -29,6 +29,6 @@ public class Employee extends AbsEntity {
 
     private String role;
 
-    @ManyToOne
+    @ManyToOne()
     private User user;
 }

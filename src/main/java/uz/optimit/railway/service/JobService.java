@@ -57,22 +57,22 @@ public class JobService {
     /**
      * Kunduzi yoki yillik ishlarni olish
      */
-    public ApiResponse getAll(UUID stationId, boolean daily, String status) {
+    public ApiResponse getAll(UUID stationId, boolean daily, String status, Timestamp date) {
         // Vaqtni hisoblaymiz (universal qism)
-        TimeRange timeRange = daily ? getDailyTimeRange() : getYearlyTimeRange();
+        TimeRange timeRange = daily ? getDailyTimeRange(date) : getYearlyTimeRange();
         List<Job> jobs = switch (status) {
             case "all" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime());
             case "rejected" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, false, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, false, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, false, timeRange.startTime(), timeRange.endTime());
             case "done" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetween(stationId, true, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, true, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, true, timeRange.startTime(), timeRange.endTime());
             case "paused" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetween(stationId, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime());
             default -> throw new IllegalArgumentException("Noto'g'ri status: " + status);
         };
 
@@ -84,10 +84,17 @@ public class JobService {
     /**
      * Kun boshidan kun oxirigacha bo'lgan vaqt oralig'ini olish
      */
-    private TimeRange getDailyTimeRange() {
-        LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
-        return new TimeRange(Timestamp.valueOf(startOfDay), Timestamp.valueOf(endOfDay));
+    private TimeRange getDailyTimeRange(Timestamp startTime) {
+        if (startTime == null) {
+            LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
+            LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
+            return new TimeRange(Timestamp.valueOf(startOfDay), Timestamp.valueOf(endOfDay));
+        } else {
+            LocalDateTime givenDate = startTime.toLocalDateTime().toLocalDate().atStartOfDay();
+            LocalDateTime startOfDay = givenDate.with(LocalTime.MIN);
+            LocalDateTime endOfDay = givenDate.with(LocalTime.MAX);
+            return new TimeRange(Timestamp.valueOf(startOfDay), Timestamp.valueOf(endOfDay));
+        }
     }
 
     /**
@@ -183,8 +190,12 @@ public class JobService {
         }
 
         Job job = optionalJob.get();
-        if (job.isConfirm()) {
-            return new ApiResponse("Ish alaqachon tasdiqlangan", false);
+        if (dto.isConfirmed()) {
+            job.setDone(true);
+            job.setConfirm(true);
+        } else {
+            job.setDone(false);
+            job.setConfirm(false);
         }
         job.setConfirm(dto.isConfirmed());
         job.setConfirmUser(optionalUser.get());
@@ -204,7 +215,14 @@ public class JobService {
         }
 
         Job job = optionalJob.get();
-        job.setDone(dto.isDone());
+        if (dto.isDone()) {
+            job.setConfirm(false);
+            job.setDone(true);
+        } else {
+            job.setConfirm(false);
+            job.setDone(false);
+        }
+        job.setDescription(dto.getMessage());
         job.setDoneOrPausedUser(optionalUser.get());
         jobRepository.save(job);
         return new ApiResponse("Saqlandi", true);

@@ -32,7 +32,7 @@ public class LevelCrossingService {
                 levelCrossingRepository.findById(id);
 
         if (optionalLevelCrossing.isEmpty())
-            throw new IllegalArgumentException("level crossing not found");
+            return new ApiResponse("level crossing not found");
 
         LevelCrossing levelCrossing = optionalLevelCrossing.get();
         levelCrossingMapper.update(levelCrossingDto, levelCrossing);
@@ -44,7 +44,7 @@ public class LevelCrossingService {
     public ApiResponse getAll() {
         List<LevelCrossing> all = levelCrossingRepository.findAllByDeletedIsFalseOrderByCreatedAtDesc();
         if (all.isEmpty())
-            throw new IllegalArgumentException("level crossing not found");
+            return new ApiResponse("level crossing not found",false);
 
         return new ApiResponse("found", true, all.stream()
                 .map(levelCrossingMapper::toDto)
@@ -54,16 +54,14 @@ public class LevelCrossingService {
 
     public ApiResponse getById(UUID id) {
         Optional<LevelCrossing> optionalLevelCrossing = levelCrossingRepository.findById(id);
-        if (optionalLevelCrossing.isEmpty())
-            throw new IllegalArgumentException("level crossing not found");
+        return optionalLevelCrossing.map(levelCrossing -> new ApiResponse("level crossing found", true, levelCrossingMapper.toDto(levelCrossing))).orElseGet(() -> new ApiResponse("level crossing not found", false));
 
-        return new ApiResponse("level crossing found", true, levelCrossingMapper.toDto(optionalLevelCrossing.get()));
     }
 
     public ApiResponse getByPlotId(UUID plotId) {
         List<LevelCrossing> all = levelCrossingRepository.findAllByPlotIdAndDeletedIsFalseOrderByCreatedAtDesc(plotId);
         if (all.isEmpty())
-            throw new IllegalArgumentException("level crossing not found");
+            return new ApiResponse("level crossing not found");
 
         return new ApiResponse("found", true, all.stream()
                 .map(levelCrossingMapper::toDto)

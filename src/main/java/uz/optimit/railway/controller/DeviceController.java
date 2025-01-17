@@ -45,7 +45,7 @@ public class DeviceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_DEVICE")
+
     @GetMapping("/get-info-for-QR/{id}")
     public ResponseEntity<?> getInfoForQR(@PathVariable UUID id) {
         ApiResponse apiResponse = deviceService.getInfoForQR(id);
