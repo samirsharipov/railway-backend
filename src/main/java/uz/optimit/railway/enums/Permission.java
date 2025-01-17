@@ -60,6 +60,7 @@ public enum Permission {
     ADD_JOB,
     DELETE_JOB,
     EDIT_JOB,
+
     CONFIRM_JOB,
     DONE_JOB,
     PAUSE_JOB,

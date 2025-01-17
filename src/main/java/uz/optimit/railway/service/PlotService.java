@@ -45,7 +45,7 @@ public class PlotService {
     public ApiResponse getAll() {
         List<Plot> all = repository.findAllByDeletedIsFalse();
         if (all.isEmpty())
-            throw new IllegalArgumentException("Plot list is empty");
+            return new ApiResponse("Plot list is empty", false);
 
         return new ApiResponse("success", true, plotMapper.toDto(all));
     }
@@ -63,7 +63,7 @@ public class PlotService {
     public ApiResponse getByEnterprise(UUID enterpriseId) {
         List<Plot> all = repository.findAllByEnterpriseIdAndDeletedIsFalse(enterpriseId);
         if (all.isEmpty())
-            throw new IllegalArgumentException("Plot list is empty");
+            return new ApiResponse("Plot list is empty",false);
 
         return new ApiResponse("success", true, plotMapper.toDto(all));
     }

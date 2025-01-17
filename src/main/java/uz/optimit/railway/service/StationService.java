@@ -123,4 +123,21 @@ public class StationService {
 
         return new ApiResponse("stations", true, stationDtoList);
     }
+
+    public ApiResponse getByPlotUserId(UUID userId, UUID plotId) {
+        List<Employee> all = employeeRepository.findAllByUserId(userId);
+        if (all.isEmpty())
+            return new ApiResponse("not found station", false);
+        Set<Station> allStations = new HashSet<>();
+        for (Employee employee : all) {
+            for (Station station : employee.getStation()) {
+                repository.findByPlotIdAndIdAndDeletedIsFalse(plotId, station.getId()).ifPresent(allStations::add);
+            }
+        }
+        if (allStations.isEmpty())
+            return new ApiResponse("not found station", false);
+
+        return new ApiResponse("stations", true,
+                toDto(allStations.stream().toList()));
+    }
 }

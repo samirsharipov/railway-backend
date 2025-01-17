@@ -1,5 +1,6 @@
 package uz.optimit.railway.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -16,8 +17,10 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class Job extends AbsEntity {
 
+    @Column(length = 510)
     private String name;
 
+    @Column(length = 510)
     private String description;
 
     private Timestamp startTime;
@@ -40,4 +43,5 @@ public class Job extends AbsEntity {
     private boolean done;
 
     private boolean paused;
+
 }

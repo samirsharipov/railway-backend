@@ -46,7 +46,6 @@ public class PlotController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_PLOT")
     @GetMapping("/get-by-enterprise/{enterpriseId}")
     public ResponseEntity<?> getByEnterprise(@PathVariable UUID enterpriseId) {
         ApiResponse apiResponse = service.getByEnterprise(enterpriseId);

@@ -45,7 +45,6 @@ public class StationController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_STATION")
     @GetMapping("/get-by-plot-id/{plotId}")
     public ResponseEntity<?> getByPlotId(@PathVariable UUID plotId) {
         ApiResponse apiResponse = service.getByPlotId(plotId);
@@ -59,10 +58,16 @@ public class StationController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_STATION")
     @GetMapping("/get-by-user-id/{userId}")
     public ResponseEntity<?> getByEmployeeId(@PathVariable UUID userId) {
         ApiResponse apiResponse = service.getByUserId(userId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    @GetMapping("/get-by-user-plot-id/{userId}")
+    public ResponseEntity<?> getByPlotUserId(@PathVariable UUID userId,
+                                             @RequestParam UUID plotId) {
+        ApiResponse apiResponse = service.getByPlotUserId(userId, plotId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 }

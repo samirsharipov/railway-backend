@@ -10,5 +10,5 @@ import uz.optimit.railway.entity.User;
 @NoArgsConstructor
 public class AuthenticationResponseDto {
     private String token;
-    private User user;
+    private UserEmployeeDto userEmployeeDto;
 }

@@ -48,7 +48,7 @@ public class MtuService {
     public ApiResponse getById(UUID id) {
         Optional<Mtu> optionalMtu = mtuRepository.findById(id);
         if (optionalMtu.isEmpty()) {
-            throw new IllegalArgumentException("Mtu not found");
+            return new ApiResponse("Mtu not found");
         }
         Mtu mtu = optionalMtu.get();
         MtuDto mtuDto = mtuMapper.mtuDto(mtu);

@@ -45,7 +45,6 @@ public class EnterpriseController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @CheckPermission("GET_ENTERPRISE")
     @GetMapping("/get-by-mtu/{mtuId}")
     public ResponseEntity<?> getByMtu(@PathVariable UUID mtuId) {
         ApiResponse apiResponse = service.getByMtu(mtuId);
