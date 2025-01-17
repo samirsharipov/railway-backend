@@ -1,9 +1,11 @@
 package uz.optimit.railway.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import uz.optimit.railway.entity.template.AbsEntity;
 
@@ -27,6 +29,9 @@ public class Action extends AbsEntity {
     @ToString.Exclude
     private User user;
 
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private Timestamp doneTime;
 
     private boolean done = false;

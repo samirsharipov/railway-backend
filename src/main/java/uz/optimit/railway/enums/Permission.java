@@ -1,6 +1,12 @@
 package uz.optimit.railway.enums;
 
 public enum Permission {
+
+    ADD_ACTION,
+    GET_ACTION,
+    DELETE_ACTION,
+    EDIT_ACTION,
+
     GET_USER,
     ADD_USER,
     DELETE_USER,
