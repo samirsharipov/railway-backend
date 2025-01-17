@@ -113,7 +113,7 @@ public class ActionService {
     }
 
     public ApiResponse getFiler(UUID deviceId) {
-        List<Action> all = repository.findAllByDeviceIdAndDoneIsFalseOrderByCreatedAtDesc(deviceId);
+        List<Action> all = repository.findAllByDevice_CategoryIdAndDoneIsFalseOrderByCreatedAtDesc(deviceId);
         if (all.isEmpty())
             return new ApiResponse("Not found actions", false);
         List<ActionGetDto> actionGetDtoList = mapper.actionGetDtoList(all);

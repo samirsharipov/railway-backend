@@ -35,5 +35,5 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
             @Param("station") UUID stationId
     );
 
-    List<Action> findAllByDeviceIdAndDoneIsFalseOrderByCreatedAtDesc(UUID deviceId);
+    List<Action> findAllByDevice_CategoryIdAndDoneIsFalseOrderByCreatedAtDesc(UUID deviceCategoryId);
 }

@@ -15,6 +15,11 @@ public class CheckPermissionExecutor {
     public void checkUserPermissionMyMethod(CheckPermission checkPermission) {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Get current user
         boolean exist = false;
+
+        for (GrantedAuthority authority : principal.getAuthorities()) {
+            System.out.printf("Check permission: %s\n", authority.getAuthority());
+        }
+
         for (GrantedAuthority authority : principal.getAuthorities()) {
             if (authority.getAuthority().equals(checkPermission.value())) {
                 exist = true;
