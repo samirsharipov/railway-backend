@@ -100,7 +100,7 @@ public class ActionService {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return EARTH_RADIUS * c * 1000;
+        return EARTH_RADIUS * c;
     }
 
     public ApiResponse delete(UUID id) {
