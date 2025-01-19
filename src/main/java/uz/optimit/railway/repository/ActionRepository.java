@@ -18,7 +18,7 @@ public interface ActionRepository extends JpaRepository<Action, UUID> {
     List<Action> findAllByDeviceIdOrderByCreatedAtDesc(UUID deviceId);
 
     @Query("SELECT a FROM Action a WHERE a.device.id = :deviceId AND a.done = true ORDER BY a.createdAt DESC")
-    Optional<Action> findLatestDoneActionByDeviceId(@Param("deviceId") UUID deviceId);
+    List<Action> findLatestDoneActionByDeviceId(@Param("deviceId") UUID deviceId);
 
     @Modifying
     @Transactional
