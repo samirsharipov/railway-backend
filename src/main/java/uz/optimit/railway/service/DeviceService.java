@@ -142,9 +142,12 @@ public class DeviceService {
             return new ApiResponse("device with id " + id + " not found", false);
 
         ActionGetDto actionGetDto = new ActionGetDto();
-        Optional<Action> optionalAction = actionRepository.findLatestDoneActionByDeviceId(id);
-        if (optionalAction.isPresent()) {
-            actionGetDto = actionMapper.actionGetDto(optionalAction.get());
+        List<Action> optionalAction = actionRepository.findLatestDoneActionByDeviceId(id);
+        if (!optionalAction.isEmpty()) {
+            for (Action action : optionalAction) {
+                actionGetDto = actionMapper.actionGetDto(action);
+                break;
+            }
         }
 
         DeviceDto deviceDto = toDto(optionalDevice.get());
