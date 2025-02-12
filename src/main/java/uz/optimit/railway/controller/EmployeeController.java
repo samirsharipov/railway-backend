@@ -49,4 +49,10 @@ public class EmployeeController {
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
+        ApiResponse apiResponse = employeeService.delete(id);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
 }

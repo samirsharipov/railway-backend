@@ -129,4 +129,20 @@ public class EmployeeService {
         return result;
     }
 
+    public ApiResponse delete(UUID id) {
+        Optional<Employee> optionalEmployee = repository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            User user = employee.getUser();
+
+            employee.setDeleted(true);
+            user.setDeleted(true);
+
+            userRepository.save(user);
+            repository.delete(employee);
+            return new ApiResponse("Employee deleted", true);
+        }
+
+        return new ApiResponse("Employee not found", true);
+    }
 }

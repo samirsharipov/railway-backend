@@ -34,6 +34,8 @@ public class JobGetDto {
 
     private String station;
 
+    private UUID stationId;
+
     private boolean yearJob;
 
     private boolean confirm;

@@ -9,16 +9,16 @@ import java.util.UUID;
 
 public interface JobRepository extends JpaRepository<Job, UUID> {
     // Kunduzi bajariladigan ishlarni olish
-    List<Job> findAllByYearJobIsFalseAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, java.sql.Timestamp startTime, java.sql.Timestamp endTime);
+    List<Job> findAllByYearJobIsFalseAndStartTimeBetweenOrderByCreatedAtDesc( java.sql.Timestamp startTime, java.sql.Timestamp endTime);
 
     // Yillik bajariladigan ishlarni olish
-    List<Job> findAllByYearJobIsTrueAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, java.sql.Timestamp startTime, java.sql.Timestamp endTime);
+    List<Job> findAllByYearJobIsTrueAndStartTimeBetweenOrderByCreatedAtDesc( java.sql.Timestamp startTime, java.sql.Timestamp endTime);
 
-    List<Job> findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, Timestamp startTime, Timestamp endTime);
+    List<Job> findAllByYearJobIsFalseAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc( Timestamp startTime, Timestamp endTime);
 
-    List<Job> findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, Timestamp startTime, Timestamp endTime);
+    List<Job> findAllByYearJobIsTrueAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc( Timestamp startTime, Timestamp endTime);
 
-    List<Job> findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, boolean done, Timestamp startTime, Timestamp endTime);
+    List<Job> findAllByYearJobIsFalseAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( boolean done, Timestamp startTime, Timestamp endTime);
 
-    List<Job> findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(UUID stationId, boolean done, Timestamp startTime, Timestamp endTime);
+    List<Job> findAllByYearJobIsTrueAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( boolean done, Timestamp startTime, Timestamp endTime);
 }

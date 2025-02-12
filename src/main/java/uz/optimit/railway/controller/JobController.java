@@ -24,12 +24,11 @@ public class JobController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @GetMapping("/getAll/{stationId}")
-    public ResponseEntity<ApiResponse> getAll(@PathVariable UUID stationId,
-                                              @RequestParam boolean daily,
+    @GetMapping("/getAll")
+    public ResponseEntity<ApiResponse> getAll(@RequestParam boolean daily,
                                               @RequestParam String status,
                                               @RequestParam Timestamp date) {
-        ApiResponse apiResponse = jobService.getAll(stationId,daily,status,date);
+        ApiResponse apiResponse = jobService.getAll(daily,status,date);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
