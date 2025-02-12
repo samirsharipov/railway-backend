@@ -57,22 +57,22 @@ public class JobService {
     /**
      * Kunduzi yoki yillik ishlarni olish
      */
-    public ApiResponse getAll(UUID stationId, boolean daily, String status, Timestamp date) {
+    public ApiResponse getAll( boolean daily, String status, Timestamp date) {
         // Vaqtni hisoblaymiz (universal qism)
         TimeRange timeRange = daily ? getDailyTimeRange(date) : getYearlyTimeRange();
         List<Job> jobs = switch (status) {
             case "all" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndStartTimeBetweenOrderByCreatedAtDesc( timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(timeRange.startTime(), timeRange.endTime());
             case "rejected" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, false, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, false, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( false, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( false, timeRange.startTime(), timeRange.endTime());
             case "done" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, true, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc(stationId, true, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( true, timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndDoneIsNotNullAndDoneAndStartTimeBetweenOrderByCreatedAtDesc( true, timeRange.startTime(), timeRange.endTime());
             case "paused" -> daily
-                    ? jobRepository.findAllByYearJobIsFalseAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime())
-                    : jobRepository.findAllByYearJobIsTrueAndStation_IdAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc(stationId, timeRange.startTime(), timeRange.endTime());
+                    ? jobRepository.findAllByYearJobIsFalseAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc( timeRange.startTime(), timeRange.endTime())
+                    : jobRepository.findAllByYearJobIsTrueAndDoneIsNullAndPausedIsTrueAndStartTimeBetweenOrderByCreatedAtDesc( timeRange.startTime(), timeRange.endTime());
             default -> throw new IllegalArgumentException("Noto'g'ri status: " + status);
         };
 
@@ -168,6 +168,7 @@ public class JobService {
         dto.setStartTime(job.getStartTime());
         dto.setDoneTime(job.getDoneTime());
         userRepository.findById(job.getCreatedBy()).ifPresent(user -> dto.setCreatedBy(user.getFirstName() + " " + user.getLastName()));
+        dto.setStationId(job.getStation().getId());
         dto.setStation(job.getStation().getName());
         dto.setDoneOrPausedUser(job.getDoneOrPausedUser() != null ? job.getDoneOrPausedUser().getFirstName() + " " + job.getDoneOrPausedUser().getLastName() : null);
         dto.setConfirmUser(job.getConfirmUser() != null ? job.getConfirmUser().getFirstName() + " " + job.getConfirmUser().getLastName() : null);
